@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero3D from "../components/Hero3D.astro";
 import { amadeusProjects, personalProjects } from "../data/projects";
 
 const groups = [
@@ -79,9 +78,26 @@ const nav = [
       </div>
     </div>
 
-    <!-- Momento 3D (teste com GLB do Sketchfab) -->
-    <div class="md:col-span-4">
-      <Hero3D src="/models/robot_playground.glb" alt="Robô 3D — teste" />
+    <!-- Hero visual: Pouso Alegre em pixel art (Pixel Lab) -->
+    <div class="md:col-span-4 md:pt-2">
+      <figure>
+        <div class="overflow-hidden rounded-2xl border border-line shadow-sm">
+          <img
+            src="/images/pouso-alegre-pixel.png"
+            alt="Pouso Alegre em pixel art — a praça da catedral"
+            width="256"
+            height="256"
+            loading="eager"
+            class="h-full w-full"
+            style="image-rendering: pixelated;"
+          />
+        </div>
+        <figcaption
+          class="mt-3 text-center font-display text-sm italic text-muted"
+        >
+          Pouso Alegre, MG — de onde eu construo.
+        </figcaption>
+      </figure>
     </div>
   </section>
 

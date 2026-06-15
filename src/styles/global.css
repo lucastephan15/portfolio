@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* ── Design system: Editorial claro ──────────────────────────────
+   Fundo papel/creme, tinta quase-preta, um único acento terroso.
+   Tipografia: serif de display (Fraunces) × sans limpa (Inter).
+   Trocar o acento é só mexer em --color-accent.
+─────────────────────────────────────────────────────────────── */
+@theme {
+  --color-paper: #faf9f6;
+  --color-paper-deep: #f1efe8;
+  --color-ink: #1a1a1a;
+  --color-muted: #6f6c64;
+  --color-line: #e2ddd2;
+  --color-accent: #9a3b2e; /* terracota/tinta — sóbrio, editorial */
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-paper);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fraunces variável: deixa o display com um leve "wonk" editorial */
+.font-display {
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}

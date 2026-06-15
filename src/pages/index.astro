@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero3D from "../components/Hero3D.astro";
 import { amadeusProjects, personalProjects } from "../data/projects";
 
 const groups = [
@@ -78,13 +79,9 @@ const nav = [
       </div>
     </div>
 
-    <!-- Reservado pro momento 3D (Spline/Three.js entra aqui depois) -->
+    <!-- Momento 3D (teste com GLB do Sketchfab) -->
     <div class="md:col-span-4">
-      <div
-        class="flex aspect-[4/5] items-center justify-center rounded-2xl border border-dashed border-line bg-paper-deep/60 text-center text-sm text-muted"
-      >
-        <span class="px-6 font-display italic"> [ momento 3D entra aqui ] </span>
-      </div>
+      <Hero3D src="/models/robot_playground.glb" alt="Robô 3D — teste" />
     </div>
   </section>
 
@@ -96,11 +93,49 @@ const nav = [
       </div>
       <div class="md:col-span-8">
         <p class="font-display text-2xl font-light leading-snug md:text-3xl">
-          Venho da administração (FGV), virei programador por conta própria e
-          hoje trabalho com IA aplicada — do dado cru ao produto que alguém usa.
-          Curioso por natureza: jogos, música e literatura entram no jeito como
-          penso design.
+          Venho da administração de empresas — FGV EAESP e HEC Paris — e virei
+          programador por conta própria. Hoje trabalho com IA aplicada, do dado
+          cru ao produto que alguém usa. Essa lente dupla, negócio e código, é o
+          que trago pra cada projeto.
         </p>
+
+        <div class="mt-10 grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
+          <div>
+            <h3 class="mb-4 text-xs uppercase tracking-[0.2em] text-accent">
+              Formação
+            </h3>
+            <ul class="space-y-4 text-sm">
+              <li>
+                <span class="block font-medium">HEC Paris</span>
+                <span class="text-muted">
+                  Bachelor of Business Administration (BBA) · 2023–
+                </span>
+              </li>
+              <li>
+                <span class="block font-medium">FGV EAESP</span>
+                <span class="text-muted">
+                  Administração de Empresas · São Paulo
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="mb-4 text-xs uppercase tracking-[0.2em] text-accent">
+              Reconhecimentos
+            </h3>
+            <ul class="space-y-4 text-sm">
+              <li>
+                <span class="block font-medium">
+                  Quadro de Honra · FGV EAESP
+                </span>
+                <span class="text-muted">
+                  Entre os 10 melhores alunos do semestre — 3º lugar (2020.2) e
+                  9º lugar (2021.2)
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>

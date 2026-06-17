@@ -1,0 +1,30 @@
+---
+import { TOOLS } from "../data/cases";
+interface Props {
+  tools?: string[];
+}
+const { tools = [] } = Astro.props;
+const items = tools.map((t) => TOOLS[t]).filter(Boolean);
+---
+
+{
+  items.length > 0 && (
+    <div class="flex flex-wrap gap-1.5">
+      {items.map((meta) => (
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs text-muted">
+          {meta.icon && (
+            <img
+              src={`/images/icons/${meta.icon}.svg`}
+              alt=""
+              width="14"
+              height="14"
+              loading="lazy"
+              class="h-3.5 w-3.5"
+            />
+          )}
+          {meta.name}
+        </span>
+      ))}
+    </div>
+  )
+}

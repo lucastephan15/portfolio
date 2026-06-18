@@ -5,8 +5,8 @@ export type AboutSlide = {
 };
 
 /* "Um pouco mais sobre mim" — carrossel entre Sobre e Trabalhos.
-   Cenas pixel art com o avatar. Formato: 16:9 (344×192 ou 1280×720).
-   Ordem aqui = ordem no carrossel. Títulos/legendas a refinar. */
+   Cenas pixel art autorais com o avatar. Formato: 16:9 (344×192 ou 1280×720).
+   Ordem aqui = ordem no carrossel. Em construção — mais cenas a caminho. */
 export const aboutSlides: AboutSlide[] = [
   {
     img: "/images/sobre/fgv.webp",
@@ -17,6 +17,16 @@ export const aboutSlides: AboutSlide[] = [
     img: "/images/sobre/faria-lima.webp",
     title: "Faria Lima",
     caption: "No centro financeiro de SP, levando IA do dado ao produto.",
+  },
+  {
+    img: "/images/sobre/setup.webp",
+    title: "Meu cantinho",
+    caption: "Onde prototipo, jogo e crio — hobby vira projeto.",
+  },
+  {
+    img: "/images/sobre/lol-livros.webp",
+    title: "Rift & livros",
+    caption: "Entre o jogo e a leitura — onde curiosidade vira projeto.",
   },
   {
     img: "/images/sobre/neve.webp",

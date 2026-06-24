@@ -28,6 +28,7 @@ const filterTools = [...toolCounts.entries()]
 const nav = [
   { label: "Sobre", href: "#sobre" },
   { label: "Trabalhos", href: "#trabalhos" },
+  { label: "AI-Ready", href: "#ai-ready" },
   { label: "Contato", href: "#contato" },
 ];
 ---
@@ -355,6 +356,175 @@ const nav = [
     </p>
   </section>
 
+  <!-- ── AI-Ready (serviço) ──────────────────────────────────── -->
+  <section
+    id="ai-ready"
+    class="relative isolate overflow-hidden border-t border-line bg-ink py-20 text-paper md:py-28"
+  >
+    <!-- Fundo: sala de controle pixel art + scrim de legibilidade -->
+    <img
+      src="/images/ai-ready-bg.webp"
+      alt=""
+      aria-hidden="true"
+      width="344"
+      height="192"
+      loading="lazy"
+      class="absolute inset-0 -z-20 h-full w-full object-cover opacity-90"
+      style="image-rendering: pixelated;"
+    />
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-r from-ink/95 via-ink/85 to-ink/60"
+    >
+    </div>
+
+    <div class="mx-auto max-w-6xl px-6 md:px-10">
+      <span class="font-display text-sm text-accent-soft">03 — AI-Ready</span>
+      <h2
+        class="mt-4 max-w-3xl font-display text-4xl font-light leading-tight md:text-5xl"
+      >
+        O ponto de partida para uma empresa usar IA de verdade.
+      </h2>
+      <p class="mt-5 max-w-2xl leading-relaxed text-paper/70">
+        Antes de qualquer agente ou automação, é preciso ter o conhecimento da
+        empresa organizado. AI-Ready é o processo padronizado que faz isso — de
+        forma ágil e replicável: mapeia, estrutura e ativa esse conhecimento num
+        assistente interno.
+      </p>
+
+      <!-- 3 passos -->
+      <div
+        class="mt-14 flex flex-col gap-4 md:flex-row md:items-stretch"
+        data-steps
+      >
+        <div
+          class="step relative flex-1 rounded-xl border border-paper/15 bg-paper/5 p-6"
+          style="transition-delay: 0ms"
+        >
+          <img
+            src="/images/ai-ready/mapear.webp"
+            alt=""
+            aria-hidden="true"
+            width="128"
+            height="128"
+            loading="lazy"
+            class="pointer-events-none absolute right-3 top-3 h-20 w-auto"
+            style="image-rendering: pixelated;"
+          />
+          <div class="flex items-center gap-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full border border-accent-soft/40 text-accent-soft">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+            </span>
+            <span class="text-xs uppercase tracking-wider text-paper/50">
+              Passo 1
+            </span>
+          </div>
+          <h3 class="mt-4 font-display text-xl">Mapear</h3>
+          <p class="mt-2 text-sm leading-relaxed text-paper/70">
+            Levantamento do conhecimento espalhado: planilhas, e-mails,
+            documentos e sistemas.
+          </p>
+        </div>
+
+        <div class="hidden items-center self-center text-accent-soft md:flex" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+        </div>
+
+        <div
+          class="step relative flex-1 rounded-xl border border-paper/15 bg-paper/5 p-6"
+          style="transition-delay: 120ms"
+        >
+          <img
+            src="/images/ai-ready/estruturar.webp"
+            alt=""
+            aria-hidden="true"
+            width="128"
+            height="128"
+            loading="lazy"
+            class="pointer-events-none absolute right-3 top-3 h-20 w-auto"
+            style="image-rendering: pixelated;"
+          />
+          <div class="flex items-center gap-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full border border-accent-soft/40 text-accent-soft">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5" /><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" /></svg>
+            </span>
+            <span class="text-xs uppercase tracking-wider text-paper/50">
+              Passo 2
+            </span>
+          </div>
+          <h3 class="mt-4 font-display text-xl">Estruturar</h3>
+          <p class="mt-2 text-sm leading-relaxed text-paper/70">
+            Organização e padronização numa base limpa, confiável e pesquisável.
+          </p>
+        </div>
+
+        <div class="hidden items-center self-center text-accent-soft md:flex" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+        </div>
+
+        <div
+          class="step relative flex-1 rounded-xl border border-paper/15 bg-paper/5 p-6"
+          style="transition-delay: 240ms"
+        >
+          <img
+            src="/images/ai-ready/oraculo.webp"
+            alt=""
+            aria-hidden="true"
+            width="128"
+            height="128"
+            loading="lazy"
+            class="pointer-events-none absolute right-3 top-3 h-20 w-auto"
+            style="image-rendering: pixelated;"
+          />
+          <div class="flex items-center gap-3">
+            <span class="grid h-10 w-10 place-items-center rounded-full border border-accent-soft/40 text-accent-soft">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /><path d="M12 7v4M10 9h4" /></svg>
+            </span>
+            <span class="text-xs uppercase tracking-wider text-paper/50">
+              Passo 3
+            </span>
+          </div>
+          <h3 class="mt-4 font-display text-xl">Oráculo</h3>
+          <p class="mt-2 text-sm leading-relaxed text-paper/70">
+            Um agente que responde sobre a empresa a partir dessa base de
+            conhecimento.
+          </p>
+        </div>
+      </div>
+
+      <!-- Benefícios -->
+      <div class="mt-14">
+        <p class="mb-6 text-xs uppercase tracking-[0.2em] text-accent-soft">
+          O que muda
+        </p>
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            [
+              "Decisões baseadas no que a empresa já sabe.",
+              "Conhecimento que não se perde com a saída de pessoas.",
+              "Onboarding de novos times mais rápido.",
+              "Base pronta para escalar IA — automações e agentes.",
+            ].map((b) => (
+              <li class="rounded-lg border border-paper/15 p-4 text-sm leading-relaxed text-paper/80">
+                {b}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Linha discreta -->
+      <p class="mt-12 text-sm text-paper/60">
+        Faz sentido para a sua empresa?{" "}
+        <a
+          href="#contato"
+          class="text-paper underline decoration-paper/30 underline-offset-4 transition-colors hover:decoration-paper"
+        >
+          Vamos conversar
+        </a>.
+      </p>
+    </div>
+  </section>
+
   <!-- ── Um pouco mais sobre mim (carrossel) ─────────────────── -->
   <section id="mais-sobre" class="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
     <div class="mb-8 flex items-baseline justify-between border-b border-line pb-6">
@@ -521,7 +691,7 @@ const nav = [
   <!-- ── Contato ─────────────────────────────────────────────── -->
   <section id="contato" class="border-t border-line bg-ink py-20 text-paper md:py-28">
     <div class="mx-auto max-w-6xl px-6 md:px-10">
-      <span class="font-display text-sm text-paper/60">03 — Contato</span>
+      <span class="font-display text-sm text-paper/60">04 — Contato</span>
       <h2
         class="mt-4 max-w-2xl font-display text-4xl font-light leading-tight md:text-6xl"
       >
@@ -715,5 +885,28 @@ const nav = [
         apply();
       }),
     );
+  }
+</script>
+
+<script>
+  // Reveal dos passos do AI-Ready ao entrar na viewport (respeita reduced-motion).
+  const steps = document.querySelector<HTMLElement>("[data-steps]");
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (steps && !reduceMotion && "IntersectionObserver" in window) {
+    steps.classList.add("steps-anim");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            steps.classList.add("is-in");
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(steps);
   }
 </script>

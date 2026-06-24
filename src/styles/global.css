@@ -41,6 +41,19 @@ body {
   color: var(--color-paper);
 }
 
+/* Reveal dos passos do AI-Ready (ativado por JS; sem JS = visível) */
+.steps-anim .step {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+.steps-anim.is-in .step {
+  opacity: 1;
+  transform: none;
+}
+
 /* Chip de filtro ativo (seção Trabalhos) */
 .filter-chip.is-active {
   background: var(--color-accent);

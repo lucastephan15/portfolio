@@ -41,6 +41,16 @@ body {
   color: var(--color-paper);
 }
 
+/* Chip de filtro ativo (seção Trabalhos) */
+.filter-chip.is-active {
+  background: var(--color-accent);
+  color: var(--color-paper);
+  border-color: var(--color-accent);
+}
+.filter-chip.is-active img {
+  filter: brightness(0) invert(1);
+}
+
 /* Hero: troca a imagem animada por um quadro estático
    quando o usuário pede "reduzir movimento" (acessibilidade). */
 .hero-static {

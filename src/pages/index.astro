@@ -6,9 +6,24 @@ import {
   highlightCases,
   amadeusCompact,
   pessoalCases,
+  TOOLS,
 } from "../data/cases";
 import { diagrams } from "../data/diagrams";
 import ToolChips from "../components/ToolChips.astro";
+
+// Ferramentas para a barra de filtro (todas que aparecem, mais usadas primeiro).
+const toolCounts = new Map<string, number>();
+for (const c of cases)
+  for (const t of c.tools) toolCounts.set(t, (toolCounts.get(t) || 0) + 1);
+const filterTools = [...toolCounts.entries()]
+  .map(([slug, count]) => ({
+    slug,
+    count,
+    name: TOOLS[slug]?.name,
+    icon: TOOLS[slug]?.icon,
+  }))
+  .filter((t) => t.name)
+  .sort((a, b) => b.count - a.count);
 
 const nav = [
   { label: "Sobre", href: "#sobre" },
@@ -75,7 +90,8 @@ const nav = [
         class="max-w-3xl font-display text-5xl font-light leading-[1.05] tracking-tight text-paper md:text-7xl"
       >
         Construo <em class="italic text-accent-soft">sistemas de IA</em> e
-        <em class="italic">automações</em> sob medida — do dado cru ao produto.
+        <em class="italic">automações</em> sob medida — do dado não estruturado
+        ao produto final.
       </h1>
       <div class="mt-10 flex flex-wrap gap-4">
         <a
@@ -111,13 +127,15 @@ const nav = [
       </div>
       <div class="md:col-span-8">
         <p class="font-display text-2xl font-light leading-snug md:text-3xl">
-          Venho da administração de empresas — FGV EAESP e HEC Paris — e virei
-          engenheiro por conta própria. Construo sistemas de IA, agentes e
-          automações sob medida: do dado cru ao produto que alguém usa.
+          Venho da administração de empresas — FGV EAESP e HEC Paris —, com
+          formação voltada a empreendedorismo, programação e estatística.
+          Construo sistemas de IA, agentes e automações sob medida:
+          independentemente de como a empresa organiza ou armazena seus dados.
         </p>
         <p class="mt-6 max-w-2xl leading-relaxed text-muted">
           Trabalho como generalista — domino negócio e código, então conduzo um
-          projeto complexo da concepção à entrega ponta a ponta, sozinho. Na
+          projeto complexo da concepção à entrega ponta a ponta, sozinho ou ao
+          lado de profissionais com a mesma abordagem e ritmo de trabalho. Na
           prática, isso vira soluções altamente personalizadas, entregues em
           prazos curtos e sem fricção de repasse. Em paralelo, curso pós em
           Machine Learning Engineering, consolidando a base técnica desse
@@ -134,18 +152,16 @@ const nav = [
                 <span class="block font-medium">
                   Pós · Machine Learning Engineering
                 </span>
-                <span class="text-muted">Em andamento</span>
+                <span class="text-muted">FIAP · 2025–2027</span>
               </li>
               <li>
                 <span class="block font-medium">HEC Paris</span>
-                <span class="text-muted">
-                  Bachelor of Business Administration (BBA) · 2023–
-                </span>
+                <span class="text-muted">Intercâmbio · 2023–2024</span>
               </li>
               <li>
                 <span class="block font-medium">FGV EAESP</span>
                 <span class="text-muted">
-                  Administração de Empresas · São Paulo
+                  Administração de Empresas · 2020–2025
                 </span>
               </li>
             </ul>
@@ -169,6 +185,174 @@ const nav = [
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ── Trabalhos ───────────────────────────────────────────── -->
+  <section id="trabalhos" class="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
+    <div
+      class="mb-10 flex items-baseline justify-between border-b border-line pb-6"
+    >
+      <h2 class="font-display text-3xl font-light md:text-4xl">
+        Trabalhos selecionados
+      </h2>
+      <span class="font-display text-sm text-accent">02 — Trabalhos</span>
+    </div>
+
+    <!-- Filtro por ferramenta -->
+    <div class="mb-10" data-filterbar>
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="mr-1 text-xs uppercase tracking-[0.18em] text-muted">
+          Filtrar por stack
+        </span>
+        {
+          filterTools.map((t) => (
+            <button
+              type="button"
+              data-filter={t.slug}
+              class="filter-chip inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs text-muted transition hover:border-accent/50"
+            >
+              {t.icon && (
+                <img
+                  src={`/images/icons/${t.icon}.svg`}
+                  alt=""
+                  width="14"
+                  height="14"
+                  class="h-3.5 w-3.5"
+                />
+              )}
+              {t.name}
+            </button>
+          ))
+        }
+        <button
+          type="button"
+          data-filter-clear
+          hidden
+          class="ml-1 rounded-full px-2.5 py-1 text-xs text-accent underline underline-offset-2"
+        >
+          Limpar
+        </button>
+      </div>
+    </div>
+
+    <!-- Destaques -->
+    <div data-group>
+      <p class="mb-6 text-sm uppercase tracking-[0.2em] text-accent">
+        Em destaque
+      </p>
+      <div class="grid gap-5 md:grid-cols-2">
+        {
+          highlightCases.map((c) => (
+            <button
+              type="button"
+              data-open={c.slug}
+              data-card
+              data-tools={c.tools.join(" ")}
+              class="group flex h-full flex-col items-start rounded-xl border border-line bg-paper-deep/40 p-6 text-left transition hover:border-accent/40 hover:bg-paper-deep md:p-8"
+            >
+              <span class="text-xs uppercase tracking-[0.18em] text-accent">
+                {c.category}
+              </span>
+              <h3 class="mt-3 font-display text-2xl font-light leading-snug tracking-tight transition-colors group-hover:text-accent">
+                {c.title}
+              </h3>
+              <p class="mt-3 leading-relaxed text-muted">{c.summary}</p>
+              {c.impact && <p class="mt-3 text-sm text-ink/75">↳ {c.impact}</p>}
+              <div class="mt-5">
+                <ToolChips tools={c.tools} />
+              </div>
+              <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                Ver arquitetura
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-0.5"><path d="m9 18 6-6-6-6" /></svg>
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Amadeus — grade compacta -->
+    <div data-group class="mt-16">
+      <div class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+        <h3 class="font-display text-xl italic text-accent">Amadeus AI</h3>
+        <p class="text-sm text-muted">
+          Mais automações, agentes e dados em produção.
+        </p>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          amadeusCompact.map((c) => (
+            <li class="h-full" data-card data-tools={c.tools.join(" ")}>
+              <button
+                type="button"
+                data-open={c.slug}
+                class="group flex h-full w-full flex-col items-start rounded-lg border border-line p-5 text-left transition hover:border-accent/40 hover:bg-paper-deep/40"
+              >
+                <span class="text-[11px] uppercase tracking-wider text-accent">
+                  {c.category}
+                </span>
+                <h4 class="mt-2 font-display text-lg leading-snug transition-colors group-hover:text-accent">
+                  {c.title}
+                </h4>
+                <p class="mt-2 text-sm leading-relaxed text-muted">
+                  {c.summary}
+                </p>
+                <div class="mt-4">
+                  <ToolChips tools={c.tools} />
+                </div>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Pessoal & pesquisa -->
+    <div data-group class="mt-16">
+      <div class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+        <h3 class="font-display text-xl italic text-accent">
+          Pessoal & Pesquisa
+        </h3>
+        <p class="text-sm text-muted">Projetos próprios, apps e artigos.</p>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          pessoalCases.map((c) => (
+            <li class="h-full" data-card data-tools={c.tools.join(" ")}>
+              <button
+                type="button"
+                data-open={c.slug}
+                class="group flex h-full w-full flex-col items-start rounded-lg border border-line p-5 text-left transition hover:border-accent/40 hover:bg-paper-deep/40"
+              >
+                <span class="text-[11px] uppercase tracking-wider text-accent">
+                  {c.category}
+                </span>
+                <h4 class="mt-2 font-display text-lg leading-snug transition-colors group-hover:text-accent">
+                  {c.title}
+                </h4>
+                <p class="mt-2 text-sm leading-relaxed text-muted">
+                  {c.summary}
+                </p>
+                <div class="mt-4">
+                  <ToolChips tools={c.tools} />
+                </div>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <p data-empty hidden class="mt-10 text-sm text-muted">
+      Nenhum trabalho com esse filtro.{" "}
+      <button
+        type="button"
+        data-filter-clear
+        class="text-accent underline underline-offset-2"
+      >
+        Limpar filtros
+      </button>
+    </p>
   </section>
 
   <!-- ── Um pouco mais sobre mim (carrossel) ─────────────────── -->
@@ -250,114 +434,6 @@ const nav = [
         }
       </div>
     </div>
-  </section>
-
-  <!-- ── Trabalhos ───────────────────────────────────────────── -->
-  <section id="trabalhos" class="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-    <div
-      class="mb-10 flex items-baseline justify-between border-b border-line pb-6"
-    >
-      <h2 class="font-display text-3xl font-light md:text-4xl">
-        Trabalhos selecionados
-      </h2>
-      <span class="font-display text-sm text-accent">02 — Trabalhos</span>
-    </div>
-
-    <!-- Destaques -->
-    <p class="mb-6 text-sm uppercase tracking-[0.2em] text-accent">
-      Em destaque
-    </p>
-    <div class="grid gap-5 md:grid-cols-2">
-      {
-        highlightCases.map((c) => (
-          <button
-            type="button"
-            data-open={c.slug}
-            class="group flex h-full flex-col items-start rounded-xl border border-line bg-paper-deep/40 p-6 text-left transition hover:border-accent/40 hover:bg-paper-deep md:p-8"
-          >
-            <span class="text-xs uppercase tracking-[0.18em] text-accent">
-              {c.category}
-            </span>
-            <h3 class="mt-3 font-display text-2xl font-light leading-snug tracking-tight transition-colors group-hover:text-accent">
-              {c.title}
-            </h3>
-            <p class="mt-3 leading-relaxed text-muted">{c.summary}</p>
-            {c.impact && (
-              <p class="mt-3 text-sm text-ink/75">↳ {c.impact}</p>
-            )}
-            <div class="mt-5">
-              <ToolChips tools={c.tools} />
-            </div>
-            <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
-              Ver arquitetura
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-0.5"><path d="m9 18 6-6-6-6" /></svg>
-            </span>
-          </button>
-        ))
-      }
-    </div>
-
-    <!-- Amadeus — grade compacta -->
-    <div class="mt-16 mb-6 flex flex-wrap items-baseline justify-between gap-2">
-      <h3 class="font-display text-xl italic text-accent">Amadeus AI</h3>
-      <p class="text-sm text-muted">
-        Mais automações, agentes e dados em produção.
-      </p>
-    </div>
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        amadeusCompact.map((c) => (
-          <li class="h-full">
-            <button
-              type="button"
-              data-open={c.slug}
-              class="group flex h-full w-full flex-col items-start rounded-lg border border-line p-5 text-left transition hover:border-accent/40 hover:bg-paper-deep/40"
-            >
-              <span class="text-[11px] uppercase tracking-wider text-accent">
-                {c.category}
-              </span>
-              <h4 class="mt-2 font-display text-lg leading-snug transition-colors group-hover:text-accent">
-                {c.title}
-              </h4>
-              <p class="mt-2 text-sm leading-relaxed text-muted">{c.summary}</p>
-              <div class="mt-4">
-                <ToolChips tools={c.tools} />
-              </div>
-            </button>
-          </li>
-        ))
-      }
-    </ul>
-
-    <!-- Pessoal & pesquisa -->
-    <div class="mt-16 mb-6 flex flex-wrap items-baseline justify-between gap-2">
-      <h3 class="font-display text-xl italic text-accent">Pessoal & Pesquisa</h3>
-      <p class="text-sm text-muted">Projetos próprios, apps e artigos.</p>
-    </div>
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        pessoalCases.map((c) => (
-          <li class="h-full">
-            <button
-              type="button"
-              data-open={c.slug}
-              class="group flex h-full w-full flex-col items-start rounded-lg border border-line p-5 text-left transition hover:border-accent/40 hover:bg-paper-deep/40"
-            >
-              <span class="text-[11px] uppercase tracking-wider text-accent">
-                {c.category}
-              </span>
-              <h4 class="mt-2 font-display text-lg leading-snug transition-colors group-hover:text-accent">
-                {c.title}
-              </h4>
-              <p class="mt-2 text-sm leading-relaxed text-muted">{c.summary}</p>
-              <div class="mt-4">
-                <ToolChips tools={c.tools} />
-              </div>
-            </button>
-          </li>
-        ))
-      }
-    </ul>
   </section>
 
   <!-- Fontes ocultas do modal (uma por case) -->
@@ -588,5 +664,56 @@ const nav = [
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !modal.classList.contains("hidden")) close();
     });
+  }
+</script>
+
+<script>
+  // Filtro de trabalhos por ferramenta (stack). Multi-seleção, semântica OU.
+  const section = document.getElementById("trabalhos");
+  if (section) {
+    const chips = Array.from(section.querySelectorAll<HTMLElement>("[data-filter]"));
+    const cards = Array.from(section.querySelectorAll<HTMLElement>("[data-card]"));
+    const groups = Array.from(section.querySelectorAll<HTMLElement>("[data-group]"));
+    const clears = Array.from(section.querySelectorAll<HTMLElement>("[data-filter-clear]"));
+    const empty = section.querySelector<HTMLElement>("[data-empty]");
+    const active = new Set<string>();
+
+    const apply = () => {
+      let anyVisible = false;
+      cards.forEach((card) => {
+        const tools = (card.getAttribute("data-tools") || "").split(" ");
+        const show =
+          active.size === 0 || [...active].some((a) => tools.includes(a));
+        card.classList.toggle("hidden", !show);
+        if (show) anyVisible = true;
+      });
+      groups.forEach((g) => {
+        const hasVisible = !!g.querySelector("[data-card]:not(.hidden)");
+        g.classList.toggle("hidden", !hasVisible);
+      });
+      chips.forEach((ch) =>
+        ch.classList.toggle(
+          "is-active",
+          active.has(ch.getAttribute("data-filter") || ""),
+        ),
+      );
+      clears.forEach((c) => ((c as HTMLButtonElement).hidden = active.size === 0));
+      if (empty) empty.hidden = anyVisible;
+    };
+
+    chips.forEach((ch) =>
+      ch.addEventListener("click", () => {
+        const slug = ch.getAttribute("data-filter") || "";
+        if (active.has(slug)) active.delete(slug);
+        else active.add(slug);
+        apply();
+      }),
+    );
+    clears.forEach((c) =>
+      c.addEventListener("click", () => {
+        active.clear();
+        apply();
+      }),
+    );
   }
 </script>

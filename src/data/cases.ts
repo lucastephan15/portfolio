@@ -10,10 +10,21 @@ export type Case = {
   impact?: string; // métrica de impacto
   stack?: string; // stack em texto livre
   tools: string[]; // slugs em TOOLS (chips de ícone)
-  group: "amadeus" | "pessoal";
-  highlight?: boolean; // destaque (card grande + diagrama + modal)
-  diagram?: string; // slug em diagrams.ts
+  group: "corporativo" | "pessoal";
+  highlight?: boolean; // destaque (card grande com preview)
+  diagram?: string; // slug em diagrams.ts — vira o preview quando não há link
   year?: string;
+
+  /* ── Card de destaque (estética "publicação") ───────────────── */
+  date?: string; // rótulo curto exibido acima do título ("Ago 2026")
+  preview?: string; // arquivo em /images/previews/ (sem extensão)
+  badge?: string; // selo sobre o preview ("ResearchGate", "NDA"…)
+  link?: string; // destino principal (abre em nova aba)
+  linkLabel?: string; // como o destino é rotulado no card
+  repo?: string; // link secundário para o código
+  soon?: boolean; // em construção — sem link ainda
+  coverTitle?: string; // capa tipográfica (quando não há screenshot nem diagrama)
+  coverMeta?: string; // linha de autoria/veículo sob a capa
 };
 
 /* Ferramentas → rótulo + ícone (arquivo em /images/icons/<icon>.svg).
@@ -35,6 +46,7 @@ export const TOOLS: Record<string, { name: string; icon?: string }> = {
   python: { name: "Python", icon: "python" },
   nodedotjs: { name: "Node", icon: "nodedotjs" },
   flask: { name: "Flask", icon: "flask" },
+  fastapi: { name: "FastAPI", icon: "fastapi" },
   sqlite: { name: "SQLite", icon: "sqlite" },
   swift: { name: "Swift", icon: "swift" },
   astro: { name: "Astro", icon: "astro" },
@@ -42,6 +54,12 @@ export const TOOLS: Record<string, { name: string; icon?: string }> = {
   n8n: { name: "n8n", icon: "n8n" },
   make: { name: "Make", icon: "make" },
   linkedin: { name: "LinkedIn", icon: "linkedin" },
+  docker: { name: "Docker", icon: "docker" },
+  mlflow: { name: "MLflow", icon: "mlflow" },
+  pytorch: { name: "PyTorch", icon: "pytorch" },
+  scikitlearn: { name: "scikit-learn", icon: "scikitlearn" },
+  plotly: { name: "Plotly", icon: "plotly" },
+  render: { name: "Render", icon: "render" },
   aws: { name: "AWS" },
   lambda: { name: "Lambda" },
   s3: { name: "S3" },
@@ -51,26 +69,186 @@ export const TOOLS: Record<string, { name: string; icon?: string }> = {
   apollo: { name: "Apollo" },
   rag: { name: "RAG" },
   ocr: { name: "OCR / Vision" },
-  pandas: { name: "pandas" },
+  pandas: { name: "pandas", icon: "pandas" },
+  gemini: { name: "Nano Banana", icon: "googlegemini" },
+  kling: { name: "Kling" },
+  twinmotion: { name: "Twinmotion" },
+  capcut: { name: "CapCut" },
+  midjourney: { name: "Midjourney" },
+  drone: { name: "Drone 4K" },
 };
 
 export const cases: Case[] = [
   // ── Destaques ──────────────────────────────────────────────────
   {
-    slug: "orquestrador-reunioes",
-    title: "Sistema multi-agente para orquestração de reuniões",
-    category: "Inteligência de reunião · Human-in-the-loop",
+    slug: "patio-sao-jose",
+    title: "Espaço São José — site do projeto de revitalização",
+    category: "Site / projeto",
+    date: "Ago 2026",
     summary:
-      "Transcrição de reunião vira ações distribuídas e controladas — tarefas, e-mails e mensagens — sempre sob aprovação humana.",
+      "Um prédio de 1910 no centro de Pouso Alegre apresentado como site — com a imagem e o vídeo do projeto produzidos do zero.",
     detail:
-      "Um agente de transcrição alimenta um agente roteador multicanal. A extração roda em Claude 3.5 Sonnet (janela de contexto longa para transcrições) e a redação em GPT-4o. O fluxo registra action items e log no HubSpot, cria tarefa no ClickUp quando há entregável técnico, posta um resumo no Slack e gera rascunho de follow-up no Gmail. Nada é disparado sem aprovação: a confirmação acontece de forma assíncrona no Slack, com botões interativos (Aprovar disparo · Regerar · Editar no CRM).",
-    impact:
-      "Tempo de follow-up e setup de tarefas por call: de 30–40 min para ~3 min, mantendo a personalização.",
-    stack: "Claude 3.5 Sonnet · GPT-4o · HubSpot · ClickUp · Slack · Gmail · Python",
-    tools: ["anthropic", "openai", "hubspot", "clickup", "slack", "gmail", "python"],
-    group: "amadeus",
+      "O projeto de revitalização existia como planta e render, mas não como algo que um investidor ou um inquilino conseguisse enxergar. O site resolve isso, e a maior parte do trabalho está na produção visual: cerca de 3 GB de acervo, incluindo 236 segundos de drone 4K que nunca tinham sido abertos, viraram a espinha do material. A cena 3D do arquiteto (Twinmotion) cobria só o lote — a rua e a vizinhança não existiam em 3D —, então o entorno foi gerado com IA de imagem e animado em vídeo. A regra que fez isso funcionar: toda imagem nasce de uma foto real do imóvel ou de um render existente, nunca do zero, e com a referência certa anexada. Um erro real ilustra o porquê: pedir “a serra ao fundo” de cabeça teria posto montanha atrás do muro do vizinho — de dentro do lote não se vê serra nenhuma. Ir buscar a foto do lugar antes de escrever o prompt é o que separa a peça verossímil da bonita e errada.",
+    stack:
+      "HTML/CSS · Python · Twinmotion · Nano Banana · Midjourney/Flux · Kling · CapCut · ElevenLabs · drone 4K",
+    tools: ["gemini", "midjourney", "kling", "twinmotion", "capcut", "elevenlabs", "drone", "python"],
+    group: "pessoal",
     highlight: true,
-    diagram: "orquestrador-reunioes",
+    preview: "patio-sao-jose",
+    link: "https://patiosaojose.info",
+    linkLabel: "patiosaojose.info",
+    year: "2026",
+  },
+  {
+    slug: "fernao-dias",
+    title: "Acidentes na Rodovia Fernão Dias (BR-381)",
+    category: "Dados abertos",
+    date: "Mai 2026",
+    summary:
+      "5.905 acidentes e 298 mortes em relatório aberto, montado quando a concessionária desativou o canal que reportava em tempo real.",
+    detail:
+      "A Fernão Dias liga São Paulo a Belo Horizonte. Até abril de 2026 a concessão era da Arteris, que mantinha um perfil ativo reportando acidentes em tempo real; com a transferência para a Motiva, esse canal saiu do ar. O relatório consolida a base datatran da PRF (uma linha por ocorrência) com indicadores, série temporal e mapas. O recorte do trecho é explícito, porque a BR-381 cobre duas rodovias diferentes em MG: UF == SP, ou UF == MG com km ≥ 480 — abaixo disso é o Vale do Aço. Reprodutível: baixar os CSVs da PRF e rodar um script.",
+    stack: "Python · pandas · Plotly · GitHub Pages · dados abertos da PRF",
+    tools: ["python", "pandas", "plotly"],
+    group: "pessoal",
+    highlight: true,
+    preview: "fernao-dias",
+    badge: "GitHub Pages",
+    link: "https://lucastephan15.github.io/fernao-dias-dados/",
+    linkLabel: "lucastephan15.github.io",
+    repo: "https://github.com/lucastephan15/fernao-dias-dados",
+    year: "2026",
+  },
+  {
+    slug: "stardew-guia",
+    title: "Guia de presentes — Stardew Valley",
+    category: "Site / dados",
+    date: "Mai 2026",
+    summary:
+      "Aniversários, receitas, rotina por estação e busca reversa, bilíngue — com os dados gerados por pipeline determinístico a partir da wiki.",
+    detail:
+      "Site estático sem build, com os dados isolados num único arquivo (data.js) que é a fonte de verdade: personagens, itens, receitas, rotinas e i18n. A pasta scripts/ guarda o pipeline em Python que gerou esse arquivo a partir da Stardew Valley Wiki — download de sprites, parsing determinístico de receitas, aniversários e rotinas, e auditoria dos presentes amados. Separar dados de apresentação é o que permite regerar tudo quando a wiki muda, sem tocar na interface.",
+    stack: "HTML/JS sem build · Python (pipeline de dados) · GitHub Pages",
+    tools: ["python", "nodedotjs"],
+    group: "pessoal",
+    highlight: true,
+    preview: "stardew",
+    badge: "GitHub Pages",
+    link: "https://lucastephan15.github.io/stardew-gift-guide/",
+    linkLabel: "lucastephan15.github.io",
+    repo: "https://github.com/lucastephan15/stardew-gift-guide",
+    year: "2026",
+  },
+  {
+    slug: "churn-api",
+    title: "API de predição de churn em telecom",
+    category: "Machine learning em produção",
+    date: "Ago 2026",
+    summary:
+      "Ranqueador de risco de cancelamento servido por API — o limiar de corte é parâmetro de negócio, não decisão do modelo.",
+    detail:
+      "O artefato é um ranqueador, não um classificador: a pergunta do negócio não é “esse cliente vai cancelar?”, é “quem eu ligo primeiro?”. Isso determina a métrica (PR-AUC, independente de limiar) e faz do limiar de corte um parâmetro alterável sem retreinar nada — aqui, 0,29, derivado da economia do erro (R$ 194 por churner perdido contra R$ 62 por atenção desperdiçada). A rota /health declara versão, sha256 do artefato carregado, nº de features e limiar aplicado: um 200 que não diz qual modelo está no ar não serve de health check. A imagem linux/amd64 reproduz o PR-AUC do treino em macOS nos dez dígitos, com zero decisões trocadas, e o deploy só sai se o CI passar (autoDeployTrigger: checksPass) — entrega contínua sem integração contínua publicaria o que ninguém aprovou.",
+    stack:
+      "Python · scikit-learn · PyTorch · MLflow · FastAPI · Docker · Render",
+    tools: ["python", "scikitlearn", "pytorch", "mlflow", "fastapi", "docker", "render"],
+    group: "pessoal",
+    highlight: true,
+    preview: "churn-api",
+    badge: "FastAPI",
+    link: "https://tc-churn-api.onrender.com",
+    linkLabel: "tc-churn-api.onrender.com",
+    repo: "https://github.com/lucastephan15/tc-mle-fase1",
+    year: "2026",
+  },
+  {
+    slug: "erp-acougue",
+    title: "Camada de dados sobre um ERP sem API",
+    category: "Engenharia de dados",
+    date: "Ago 2026",
+    summary:
+      "O ERP de um varejo de carnes não tem API. Automatizei a extração das vendas e do financeiro e montei o painel e os relatórios em cima disso.",
+    detail:
+      "O dono baixava relatórios do ERP na mão e colava num chat de IA para montar o que enviava aos sócios. O sistema faz esse caminho sozinho: um coletor autentica no ERP, baixa as cinco fontes que importam (vendas item a item, produtos, extrato, caixas e formas de pagamento) e guarda tudo; em cima disso rodam o painel e os relatórios. Cada coleta é gravada com a data em que foi lida e não sobrescreve a anterior — porque o ERP altera o histórico depois: o mesmo pedido devolveu saldos diferentes com 30 minutos de intervalo. Guardar a data da leitura é o que permite conferir qualquer número mais tarde.",
+    impact:
+      "155 endpoints do ERP mapeados; o relatório que era montado à mão sai pronto em HTML, validado contra o original.",
+    stack: "Python · sessão autenticada · pandas · Streamlit · snapshots versionados",
+    tools: ["python", "pandas", "streamlit"],
+    group: "pessoal",
+    highlight: true,
+    diagram: "erp-acougue",
+    year: "2026",
+  },
+  {
+    slug: "illusion-of-rigor",
+    title: "LLMs and the Illusion of Rigor",
+    category: "Pesquisa · Governança de IA",
+    date: "2026",
+    summary:
+      "Implications on Global Asymmetry and AI Governance in the International System.",
+    detail:
+      "Experimento de “primeira camada” com Gemini 2.5 Pro, ChatGPT-4o e Claude Opus 4: os modelos foram instruídos, pelas próprias interfaces de chat, a aprender e aplicar um modelo de decision-mapping (Guevara, 2019) ao caso empírico da governança global de IA. Os modos de falha foram distintos — substituição de tarefa, alucinação metodológica e, o mais relevante, uma “ilusão de rigor”: a saída mais competente simulou com sucesso a forma da escrita acadêmica, mas foi minada por falhas sistemáticas de evidência, com alta taxa de citações fabricadas, distorcidas e de baixa qualidade. O argumento é que essa ilusão é uma ameaça epistêmica mais perniciosa que o erro óbvio, porque transfere ao leitor o ônus da verificação forense — e que a falha não é meramente técnica, mas sintoma de um sistema global assimétrico, com lógica otimizada para plausibilidade em vez de profundidade analítica. Com Dr. Alfredo Juan Guevara Martinez e Profa. Dra. Luciana Monteiro-Krebs. Capítulo em edição para livro organizado pela PUC-RS.",
+    stack: "Gemini 2.5 Pro · ChatGPT-4o · Claude Opus 4 · Relações Internacionais",
+    tools: ["openai", "anthropic"],
+    coverTitle:
+      "LLMs and the Illusion of Rigor: implications on Global Asymmetry and AI Governance in the International System",
+    coverMeta:
+      "Guevara Martinez · Stephan · Monteiro-Krebs — capítulo em edição, PUC-RS",
+    group: "pessoal",
+    highlight: true,
+    badge: "ResearchGate",
+    link: "https://www.researchgate.net/publication/397001141_LLMs_and_the_Illusion_of_Rigor_implications_on_Global_Asymmetry_and_AI_Governance_in_the_International_System",
+    linkLabel: "researchgate.net",
+    year: "2026",
+  },
+  {
+    slug: "tese-gaia",
+    title: "Tornando visível o design de LLMs",
+    category: "Pesquisa · TCC",
+    date: "2025",
+    summary:
+      "Um estudo eDSR do Projeto Gaia em português brasileiro — trabalho de conclusão de curso na FGV EAESP.",
+    stack: "eDSR · LLMs · português brasileiro · FGV EAESP",
+    tools: [],
+    group: "pessoal",
+    highlight: true,
+    preview: "tese",
+    badge: "TCC",
+    link: "/docs/tese-luca-stephan.pdf",
+    linkLabel: "Ler o PDF",
+    year: "2025",
+  },
+
+  {
+    slug: "cardapio-lamen",
+    title: "Cardápio digital para uma casa de lámen",
+    category: "Site / cardápio digital",
+    date: "Set 2026",
+    summary:
+      "Cardápio digital para uma casa de lámen de grande porte em São Paulo.",
+    coverTitle: "Cardápio digital",
+    coverMeta: "Entrega prevista para setembro de 2026",
+    tools: [],
+    group: "corporativo",
+    highlight: true,
+    soon: true,
+    year: "2026",
+  },
+
+  // ── Corporativo — grade compacta ───────────────────────────────
+  {
+    slug: "motor-rag-propostas",
+    title: "Motor RAG para geração de propostas técnicas",
+    category: "Documentos & conhecimento (RAG)",
+    summary:
+      "Pipeline que gera propostas técnicas/comerciais conectadas ao histórico da conta e ao conhecimento da empresa.",
+    detail:
+      "Cadeia de múltiplos steps: (1) ingestão de contexto via RAG sobre o histórico da conta e transcrições; (2) estruturação do esqueleto; (3) geração do conteúdo técnico (atributos de marca, requisitos, equipe); (4) revisão de tom de voz. O output sai em Markdown (formatação limpa) e é convertido dinamicamente para Google Docs, permitindo edição colaborativa antes da exportação para PDF.",
+    impact:
+      "Tempo médio de elaboração de proposta: de 2–3 h para ~15 min (restante = revisão humana no Docs), mantendo personalização e tom de marca.",
+    stack: "RAG · LLM · Google Docs · Markdown→PDF · Python",
+    tools: ["rag", "openai", "googledocs", "python"],
+    group: "corporativo",
+    diagram: "motor-rag-propostas",
     year: "2025",
   },
   {
@@ -85,26 +263,8 @@ export const cases: Case[] = [
       "SLA de primeira resposta de horas para instantâneo (0 s); +15–25% na conversão para agendamento ao não deixar o lead esfriar.",
     stack: "WhatsApp Business API · voz (ElevenLabs/Vapi) · Google Calendar · CRM",
     tools: ["whatsapp", "elevenlabs", "vapi", "googlecalendar", "hubspot"],
-    group: "amadeus",
-    highlight: true,
+    group: "corporativo",
     diagram: "agente-agendamento",
-    year: "2025",
-  },
-  {
-    slug: "motor-rag-propostas",
-    title: "Motor RAG para geração de propostas técnicas",
-    category: "Documentos & conhecimento (RAG)",
-    summary:
-      "Pipeline que gera propostas técnicas/comerciais conectadas ao histórico da conta e ao conhecimento da empresa.",
-    detail:
-      "Cadeia de múltiplos steps: (1) ingestão de contexto via RAG sobre o histórico da conta e transcrições; (2) estruturação do esqueleto; (3) geração do conteúdo técnico (atributos de marca, requisitos, equipe); (4) revisão de tom de voz. O output sai em Markdown (formatação limpa) e é convertido dinamicamente para Google Docs, permitindo edição colaborativa antes da exportação para PDF.",
-    impact:
-      "Tempo médio de elaboração de proposta: de 2–3 h para ~15 min (restante = revisão humana no Docs), mantendo personalização e tom de marca.",
-    stack: "RAG · LLM · Google Docs · Markdown→PDF · Python",
-    tools: ["rag", "openai", "googledocs", "python"],
-    group: "amadeus",
-    highlight: true,
-    diagram: "motor-rag-propostas",
     year: "2025",
   },
   {
@@ -119,22 +279,35 @@ export const cases: Case[] = [
       "Forecast de pipeline com ~80–85% de acurácia, substituindo decisão por intuição.",
     stack: "AWS Lambda · S3 · Athena · QuickSight · Streamlit · HubSpot API · Python",
     tools: ["lambda", "s3", "athena", "quicksight", "streamlit", "hubspot", "python"],
-    group: "amadeus",
-    highlight: true,
+    group: "corporativo",
     diagram: "analytics-crm",
     year: "2024",
   },
-
-  // ── Amadeus — grade compacta ───────────────────────────────────
+  {
+    slug: "orquestrador-reunioes",
+    title: "Sistema multi-agente para orquestração de reuniões",
+    category: "Inteligência de reunião · Human-in-the-loop",
+    summary:
+      "Transcrição de reunião vira ações distribuídas e controladas — tarefas, e-mails e mensagens — sempre sob aprovação humana.",
+    detail:
+      "Um agente de transcrição alimenta um agente roteador multicanal. A extração roda em Claude 3.5 Sonnet (janela de contexto longa para transcrições) e a redação em GPT-4o. O fluxo registra action items e log no HubSpot, cria tarefa no ClickUp quando há entregável técnico, posta um resumo no Slack e gera rascunho de follow-up no Gmail. Nada é disparado sem aprovação: a confirmação acontece de forma assíncrona no Slack, com botões interativos (Aprovar disparo · Regerar · Editar no CRM).",
+    impact:
+      "Tempo de follow-up e setup de tarefas por call: de 30–40 min para ~3 min, mantendo a personalização.",
+    stack: "Claude 3.5 Sonnet · GPT-4o · HubSpot · ClickUp · Slack · Gmail · Python",
+    tools: ["anthropic", "openai", "hubspot", "clickup", "slack", "gmail", "python"],
+    group: "corporativo",
+    diagram: "orquestrador-reunioes",
+    year: "2025",
+  },
   {
     slug: "maia-recrutador",
-    title: "MAIA — recrutador por voz com IA",
+    title: "Recrutador por voz com IA",
     category: "Agentes de voz & WhatsApp",
     summary:
       "Recrutador autônomo: conversa com o gestor no WhatsApp, liga para candidatos, transcreve, avalia e devolve a shortlist.",
     stack: "Python/Flask · Twilio · ElevenLabs · GPT · WhatsApp",
     tools: ["python", "flask", "twilio", "elevenlabs", "openai", "whatsapp"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2026",
   },
   {
@@ -144,10 +317,10 @@ export const cases: Case[] = [
     summary:
       "Agente híbrido (voz de baixa latência + WhatsApp) que faz reservas batendo direto no sistema de gestão e na agenda.",
     detail:
-      "Projeto-mãe do qual o MAIA derivou. Core de voz de baixíssima latência (ElevenLabs + Vapi) e texto via WhatsApp Business API. A reserva aciona um webhook no sistema de gestão interno para travar a mesa e, em paralelo, dispara o convite via Google Calendar ao cliente.",
+      "Core de voz de baixíssima latência (ElevenLabs + Vapi) e texto via WhatsApp Business API. A reserva aciona um webhook no sistema de gestão interno para travar a mesa e, em paralelo, dispara o convite via Google Calendar ao cliente.",
     stack: "Vapi · ElevenLabs · WhatsApp · Google Calendar · webhooks · Python",
     tools: ["vapi", "elevenlabs", "whatsapp", "googlecalendar", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
@@ -158,7 +331,7 @@ export const cases: Case[] = [
       "Conduz a cotação de seguro saúde por conversa, capturando dados e qualificando o lead no WhatsApp.",
     stack: "WhatsApp Business API · LLM · Python",
     tools: ["whatsapp", "openai", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
@@ -169,7 +342,7 @@ export const cases: Case[] = [
       "Consolida os deals por parceiro (cliente, porte, indústria, valor, estágio) e envia automaticamente toda semana.",
     stack: "HubSpot API · Google Sheets · Gmail · Python",
     tools: ["hubspot", "googlesheets", "gmail", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2024",
   },
   {
@@ -182,7 +355,7 @@ export const cases: Case[] = [
       "O nome no Google Sheets dispara a busca via RocketReach/Apollo (perfis, telefones diretos e e-mails corporativos validados) e o upsert na HubSpot API: cria a empresa se não existir, depois os contatos, tudo vinculado por ID. Antes de qualquer upsert, valida o domínio e gera hash do e-mail contra a base — garantindo integridade e evitando poluição do CRM.",
     stack: "Google Sheets · RocketReach/Apollo · HubSpot API · Python",
     tools: ["googlesheets", "rocketreach", "apollo", "hubspot", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2024",
   },
   {
@@ -193,7 +366,7 @@ export const cases: Case[] = [
       "Mudança de estágio do deal dispara as ações de relacionamento da régua, sobre um funil bem estruturado.",
     stack: "HubSpot (workflows + API) · Python",
     tools: ["hubspot", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2024",
   },
   {
@@ -206,29 +379,29 @@ export const cases: Case[] = [
       "Via Gmail API: classificação multi-label por intenção (Dúvida Técnica, Comercial, Suporte, Spam) e prioridade (Alta/Média/Baixa). Para intenções comerciais mapeadas (ex.: cotação padrão), além de etiquetar, insere um rascunho de resposta altamente contextualizado na pasta Drafts.",
     stack: "Gmail API · LLM · Python",
     tools: ["gmail", "openai", "python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
-    slug: "oraculo-amadeus",
-    title: "Oráculo — assistente RAG da empresa",
+    slug: "assistente-rag-interno",
+    title: "Assistente RAG sobre a base de conhecimento da empresa",
     category: "Documentos & conhecimento (RAG)",
     summary:
-      "Assistente conversacional sobre a base de conhecimento da empresa; alimenta a proposta e outros agentes.",
+      "Assistente conversacional sobre a base interna; alimenta o motor de propostas e outros agentes.",
     stack: "RAG · LLM · Streamlit",
     tools: ["rag", "openai", "streamlit"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
-    slug: "rocketresearch",
-    title: "RocketResearch — radar de pesquisa em IA",
+    slug: "radar-pesquisa-ia",
+    title: "Radar de pesquisa em IA",
     category: "Dados & scraping",
     summary:
       "Varre fontes de ponta (DeepMind, Stanford HAI, Nature MI, Anthropic, NVIDIA…), normaliza e entrega base pesquisável.",
     stack: "Python · web scraping · Streamlit · SQLite",
     tools: ["python", "streamlit", "sqlite"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2026",
   },
   {
@@ -239,18 +412,18 @@ export const cases: Case[] = [
       "Fetchers (LinkedIn, fontes de VC) e pipelines de estruturação de grandes bases para alimentar a prospecção.",
     stack: "Python · web scraping · data enrichment",
     tools: ["python", "linkedin", "rocketreach"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
-    slug: "nexus-pricing",
-    title: "Nexus — motor de precificação cloud (OCI)",
+    slug: "motor-precificacao-cloud",
+    title: "Motor de precificação de infraestrutura cloud",
     category: "Cloud & engenharia de custos",
     summary:
       "Engine de precificação de infraestrutura: catálogo, motor de cenários e runner, com testes — para custos reproduzíveis.",
     stack: "Python · pricing engine · Oracle OCI · testes",
     tools: ["python"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
   {
@@ -263,83 +436,13 @@ export const cases: Case[] = [
       "Economia de ~20–30 h operacionais/semana (≈1 FTE de data entry), com erros de digitação reduzidos a zero.",
     stack: "Python · pandas/openpyxl",
     tools: ["python", "pandas"],
-    group: "amadeus",
+    group: "corporativo",
     year: "2025",
   },
 
-  // ── Pessoal & pesquisa ─────────────────────────────────────────
-  {
-    slug: "tomaoremedin",
-    title: "TomaORemedin",
-    category: "App / Saúde",
-    summary:
-      "PWA de adesão a tratamento (hipertensão/diabetes), criado para apoiar uma pesquisa de iniciação científica.",
-    stack: "PWA · Saúde · Pesquisa aplicada",
-    tools: [],
-    group: "pessoal",
-    year: "2026",
-  },
-  {
-    slug: "tft-overlay",
-    title: "Overlay de TFT para Mac",
-    category: "Ferramenta / OCR",
-    summary:
-      "Motor de OCR (Vision) construído do zero para reconhecer augments onde o Overwolf (Windows-only) não chega.",
-    detail:
-      "Overlay nativo de macOS que reconhece augments por OCR (Apple Vision, pt/en) em tempo real, para decisão de early/mid game. Demonstra competência de OCR/extração estruturada do zero — a mesma base aplicável a NF-e/conciliação e ao parsing de documentos do RAG.",
-    stack: "macOS · OCR / Vision · Swift",
-    tools: ["swift", "ocr"],
-    group: "pessoal",
-    year: "2026",
-  },
-  {
-    slug: "craving",
-    title: "Craving",
-    category: "App",
-    summary:
-      "PWA pessoal para atravessar a fissura de cigarro — projetado em torno do momento de craving, não do hábito.",
-    stack: "PWA · Design comportamental",
-    tools: [],
-    group: "pessoal",
-    year: "2026",
-  },
-  {
-    slug: "stardew-guia",
-    title: "Guia de Presentes — Stardew Valley",
-    category: "Site",
-    summary:
-      "Guia data-driven de presentes do jogo, refatorado para separar dados de apresentação.",
-    stack: "Astro · data-driven",
-    tools: ["astro"],
-    group: "pessoal",
-    year: "2026",
-  },
-  {
-    slug: "chaos-engineering-dsr",
-    title: "Chaos Engineering como artefato DSR",
-    category: "Pesquisa",
-    summary:
-      "Artigo em Information Systems tratando Chaos Engineering como artefato de Design Science Research.",
-    stack: "DSR · Information Systems · Paper",
-    tools: [],
-    group: "pessoal",
-    year: "2025–26",
-  },
-  {
-    slug: "illusion-of-rigor",
-    title: "The Illusion of Rigor",
-    category: "Pesquisa",
-    summary:
-      "Preprint sobre a 'ilusão de rigor' em LLMs, testando Gemini, GPT-4o e Claude sob protocolo comum.",
-    stack: "LLMs · Avaliação · Preprint",
-    tools: ["openai", "anthropic"],
-    group: "pessoal",
-    year: "2025–26",
-  },
 ];
 
 export const highlightCases = cases.filter((c) => c.highlight);
-export const amadeusCompact = cases.filter(
-  (c) => c.group === "amadeus" && !c.highlight,
+export const corporativoCompact = cases.filter(
+  (c) => c.group === "corporativo" && !c.highlight,
 );
-export const pessoalCases = cases.filter((c) => c.group === "pessoal");

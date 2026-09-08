@@ -136,4 +136,41 @@ export const diagrams: Record<string, string> = {
     <path class="edge" ${A} d="M724,148 C740,148 736,211 738,211"/>
     <text class="note" x="24" y="276">Métricas: win-rate por ICP · coorte por indústria · pipeline velocity · forecast (~80–85%).</text>
   </svg>`,
+
+  "erp-acougue": `
+  <svg viewBox="0 0 920 320" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arquitetura da camada de dados sobre o ERP">
+    ${style}
+    <rect class="box" x="24" y="118" width="168" height="60" rx="8"/>
+    <text class="lbl" x="108" y="142" text-anchor="middle">ERP do varejo</text>
+    <text class="sub" x="108" y="159" text-anchor="middle">sem API · somente leitura</text>
+    <rect class="acc" x="228" y="118" width="160" height="60" rx="8"/>
+    <text class="lbl" x="308" y="142" text-anchor="middle">Coletor</text>
+    <text class="sub" x="308" y="159" text-anchor="middle">login + 5 fontes</text>
+    <rect class="acc" x="424" y="106" width="188" height="84" rx="8"/>
+    <text class="lbl" x="518" y="132" text-anchor="middle">Snapshot datado</text>
+    <text class="sub" x="518" y="150" text-anchor="middle">manifesto: contagens,</text>
+    <text class="sub" x="518" y="165" text-anchor="middle">somas, SHA-256</text>
+    <text class="sub" x="518" y="181" text-anchor="middle">fonte de verdade</text>
+    <rect class="box" x="648" y="118" width="120" height="60" rx="8"/>
+    <text class="lbl" x="708" y="144" text-anchor="middle">dados.Base</text>
+    <text class="sub" x="708" y="161" text-anchor="middle">única porta</text>
+    <rect class="sink" x="800" y="52" width="96" height="44" rx="8"/>
+    <text class="lbl" x="848" y="79" text-anchor="middle">Relatórios</text>
+    <rect class="sink" x="800" y="126" width="96" height="44" rx="8"/>
+    <text class="lbl" x="848" y="153" text-anchor="middle">Painel</text>
+    <rect class="sink" x="800" y="200" width="96" height="44" rx="8"/>
+    <text class="lbl" x="848" y="227" text-anchor="middle">Alertas</text>
+    <rect class="box" x="424" y="212" width="188" height="44" rx="8"/>
+    <text class="sub" x="518" y="232" text-anchor="middle">revisoes/ — a leitura anterior</text>
+    <text class="sub" x="518" y="247" text-anchor="middle">é arquivada, nunca apagada</text>
+    <path class="edge" ${A} d="M192,148 L224,148"/>
+    <path class="edge" ${A} d="M388,148 L420,148"/>
+    <path class="edge" ${A} d="M612,148 L644,148"/>
+    <path class="edge" d="M768,148 L788,148"/>
+    <path class="edge" ${A} d="M788,148 C796,148 792,74 798,74"/>
+    <path class="edge" ${A} d="M788,148 L798,148"/>
+    <path class="edge" ${A} d="M788,148 C796,148 792,222 798,222"/>
+    <path class="edge" ${A} d="M518,190 L518,208"/>
+    <text class="note" x="24" y="300">O ERP reescreve o passado: o mesmo request devolveu saldos diferentes com 30 min de intervalo — por isso toda leitura é carimbada.</text>
+  </svg>`,
 };

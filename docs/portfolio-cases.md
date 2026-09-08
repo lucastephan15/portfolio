@@ -8,23 +8,45 @@
 
 ## Tese
 
-Generalista de formação dupla (negócio + engenharia) que leva problemas corporativos complexos da concepção à entrega **ponta a ponta, sozinho** — com soluções altamente personalizadas, entregues em prazos curtos. Três anos na Amadeus AI cobrindo praticamente todo escopo de automação corporativa: CRM, agentes de voz/texto, inteligência de reunião, dados/BI, documentos e cloud.
+Generalista de formação dupla (negócio + engenharia) que leva problemas corporativos complexos da concepção à entrega **ponta a ponta, sozinho** — com soluções altamente personalizadas, entregues em prazos curtos. Três anos de experiência corporativa cobrindo praticamente todo escopo de automação: CRM, agentes de voz/texto, inteligência de reunião, dados/BI, documentos e cloud.
+
+> **Nomes de empresa/produto do empregador não aparecem no site** (revisão de 08/09/2026). Vale para a marca corporativa e para os nomes internos de produto (o motor de precificação, o assistente RAG interno, o radar de pesquisa e o recrutador por voz entram descritos pela função).
 
 ---
 
-## Curadoria do site
+## Curadoria do site (revisão de 08/09/2026)
 
-Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura próprios); o restante em **grade compacta**.
+O site é um **currículo**, não a página de uma empresa — a seção de serviço "AI-Ready" foi removida.
 
-| # | Case | Título público | O que prova |
+**Destaques** viraram um grid único no formato "publicação" (referência: seção *Our Publications* do jina.ai): preview no topo, data, título. São dois tipos de card, com a mesma casca:
+
+| Tipo | Preview | Ação principal |
+|---|---|---|
+| **Com link público** | screenshot da própria página (`public/images/previews/*.webp`) | abre o site/paper |
+| **Sob NDA** | o diagrama de arquitetura SVG, como miniatura | abre o modal com o diagrama grande |
+
+Destaques atuais (ordem do grid):
+
+| # | Case | Tipo | Link |
 |---|---|---|---|
-| ⭐ 1 | **C1** | Sistema Multi-Agente para Orquestração de Reuniões (Human-in-the-Loop) | Governança, segurança, multi-modelo |
-| ⭐ 2 | **B3** *(B2 como secundário forte)* | Agente Conversacional Autônomo com Roteamento e Agendamento em Tempo Real | Integração com o mundo físico (Calendar/sistemas), latência de voz |
-| ⭐ 3 | **E1** | Motor RAG para Geração Automatizada de Propostas Técnicas | RAG aplicado a documentos complexos |
-| ⭐ 4 | **A3** | Plataforma Serverless de Data Analytics e Forecast para CRM | Engenharia de dados pesada (AWS) — quebra o estereótipo "só LLM" |
+| 1 | Espaço São José | screenshot | `patiosaojose.info` |
+| 2 | Acidentes na Fernão Dias (BR-381) | screenshot + código | GitHub Pages |
+| 3 | Guia de presentes — Stardew Valley | screenshot + código | GitHub Pages |
+| 4 | API de predição de churn em telecom | screenshot + código | `tc-churn-api.onrender.com` · repo `tc-mle-fase1` |
+| 5 | Camada de dados sobre um ERP sem API | diagrama | — |
+| 6 | LLMs and the Illusion of Rigor | capa + link | ResearchGate |
+| 7 | Tornando visível o design de LLMs (TCC) | capa (1ª pág.) + PDF | `/docs/tese-luca-stephan.pdf` |
+| 8 | Cardápio digital para casa de lámen | capa · **em breve** | — |
 
-> **Interface dos destaques:** cada um leva um **diagrama de arquitetura** limpo (User → WhatsApp API → AWS Lambda → ElevenLabs/HubSpot…). CTOs/Tech Leads escaneiam arquitetura em segundos.
-> **Impacto:** linhas `Impacto (PREENCHER)` abaixo trazem a *moldura* sugerida — **substituir pelos números reais** antes do deploy (sem métrica chutada).
+> Ordem definida pelo Luca em 08/09/2026: os três sites navegáveis abrem a galeria; o resto segue atrás.
+
+Os destaques ficam numa **galeria horizontal** (scroll-snap + setas), não numa grade vertical — a página ficava longa demais.
+
+**Os 4 destaques corporativos antigos desceram para a grade Corporativo** (08/09/2026): orquestração de reuniões (C1), analytics/forecast de CRM (A3), agente de agendamento (B3) e motor RAG de propostas (E1). Continuam com diagrama e modal, só não ocupam mais a galeria.
+
+Abaixo dos destaques, uma grade compacta: **Corporativo**. A grade **Pessoal** foi removida (08/09/2026) junto com o card do overlay de TFT.
+
+> **Impacto:** só números reais. Onde não há medição, o card fica sem linha de impacto.
 
 ---
 
@@ -73,11 +95,11 @@ Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura própr
 
 ## B. Agentes conversacionais (voz & WhatsApp)
 
-### B1. MAIA — Recrutador por voz com IA `[mapeado]`
+### B1. Recrutador por voz com IA `[mapeado]`
 - **Resumo:** recrutador autônomo que conversa com o gestor por WhatsApp, liga para candidatos, transcreve, avalia e devolve shortlist.
 - **Stack:** Python/Flask · Twilio · ElevenLabs · GPT · WhatsApp
 
-### B2. Super-agente de atendimento — rede de restaurantes `[novo]` (projeto-mãe do MAIA)
+### B2. Super-agente de atendimento — rede de restaurantes `[novo]` (projeto-mãe do B1)
 - **Resumo:** agente híbrido que substitui múltiplas funções de front-office.
 - **Como funciona:** core de **voz de baixíssima latência** (ElevenLabs + **Vapi**) e texto via **WhatsApp Business API**; reserva aciona **webhook** no sistema de gestão interno do restaurante para travar a mesa e, em paralelo, dispara convite via **Google Calendar API** ao cliente.
 - **Stack:** Vapi · ElevenLabs · WhatsApp Business API · Google Calendar API · webhooks · Python
@@ -131,7 +153,7 @@ Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura própr
 - **Atributo:** "cérebro" comercial conectado ao oráculo de conhecimento.
 - **Impacto:** tempo médio de elaboração de proposta de **2–3 h para ~15 min** (restante = revisão humana e ajustes no Google Docs), mantendo personalização e tom de marca.
 
-### E2. Oráculo Amadeus — assistente RAG `[mapeado]`
+### E2. Assistente RAG sobre a base de conhecimento interna `[mapeado]`
 - **Resumo:** assistente conversacional sobre a base de conhecimento da empresa; alimenta a proposta e outros agentes.
 - **Stack:** RAG · LLM · Streamlit
 
@@ -144,7 +166,7 @@ Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura própr
 
 ## F. Dados, scraping & enriquecimento
 
-### F1. RocketResearch — radar de pesquisa em IA `[mapeado]`
+### F1. Radar de pesquisa em IA `[mapeado]`
 - **Resumo:** varre fontes de ponta (DeepMind, Stanford HAI, Nature MI, Anthropic, NVIDIA, AWS ML…), normaliza e entrega base pesquisável.
 - **Stack:** Python · web scraping · Streamlit · SQLite
 
@@ -161,7 +183,7 @@ Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura própr
 
 ## G. Cloud, plataforma & ferramentas internas
 
-### G1. Nexus — motor de precificação cloud (OCI) `[mapeado]`
+### G1. Motor de precificação de infraestrutura cloud (OCI) `[mapeado]`
 - **Resumo:** engine de precificação de infraestrutura em nuvem: catálogo, motor de cenários e runner, com testes.
 - **Como funciona:** mapeia custo de armazenamento, infraestrutura e VMs para estimar custos de projeto de forma reproduzível.
 - **Stack:** Python · pricing engine · Oracle OCI · testes
@@ -196,13 +218,66 @@ Foco da atenção em **4 destaques** (com detalhe/diagrama de arquitetura própr
 
 ---
 
-## Projetos pessoais & pesquisa `[mapeado]`
-- **TomaORemedin** — PWA de adesão a tratamento (hipertensão/diabetes), apoio a IC.
-- **Overlay de TFT para Mac** — motor de **OCR (Vision) construído do zero** para reconhecer augments onde o Overwolf não chega. *(Comprova competência de OCR/extração estruturada — a mesma base que cobriria NF-e/conciliação. Reforçada pelo parsing de documentos do RAG, ver E3.)*
-- **Craving** — PWA para atravessar a fissura de cigarro (design comportamental).
-- **Guia de Presentes — Stardew Valley** — site data-driven (Astro).
-- **Chaos Engineering como artefato DSR** — paper em Information Systems.
-- **The Illusion of Rigor** — preprint sobre "ilusão de rigor" em LLMs (Gemini/GPT-4o/Claude).
+## I. Projetos próprios com link público `[novo — 08/09/2026]`
+
+Entraram como **destaques** porque têm página acessível: o preview é screenshot da própria página.
+
+### I1. API de predição de churn em telecom ⭐ DESTAQUE
+Tech Challenge Fase 1 da pós em MLE (FIAP/Alura). **Ranqueador, não classificador** — a pergunta é "quem eu ligo primeiro?", o que fixa a métrica em PR-AUC e faz do limiar (0,29) um parâmetro de negócio, derivado de R$ 194 por churner perdido × R$ 62 por atenção desperdiçada.
+- `/health` declara versão, sha256 do artefato, nº de features e limiar aplicado.
+- Imagem `linux/amd64` reproduz o PR-AUC do treino em macOS nos 10 dígitos, 0 decisões trocadas.
+- Deploy só sai com o CI verde (`autoDeployTrigger: checksPass` no `render.yaml`).
+- Model card com seção de fairness que publica o resultado ruim.
+- **No ar:** https://tc-churn-api.onrender.com · **Código:** https://github.com/lucastephan15/tc-mle-fase1
+- Stack: Python · scikit-learn · PyTorch · MLflow · FastAPI · Docker · Render
+
+### I2. Camada de dados sobre um ERP sem API ⭐ DESTAQUE
+Varejo de carnes (**nome do negócio omitido**). O ERP não tem API pública, só um export "integração com BI" atrás de login.
+> **Copy do card (revisada em 08/09/2026):** texto simples e direto — o que foi feito e o resultado. O detalhe técnico (snapshot, manifesto, SHA-256) fica no modal e na linha de impacto, não na chamada.
+- Coletor autentica e varre 5 fontes; 155 endpoints do ERP mapeados.
+- **Snapshot datado com manifesto** (fonte, período, contagens, somas, SHA-256) porque o histórico muda retroativamente: o mesmo request devolveu saldos diferentes com 30 min de intervalo.
+- Recoleta arquiva a leitura anterior em `revisoes/`, nunca sobrescreve. Leitura por uma única porta (`dados.Base`), que informa de qual snapshot veio cada número.
+- Relatório que era montado à mão sai pronto em HTML, validado contra o original.
+- Stack: Python · sessão autenticada · pandas · Streamlit · Repo local `popota_estancia_2c`
+
+### I3. Acidentes na Rodovia Fernão Dias (BR-381) ⭐ DESTAQUE
+Relatório aberto sobre a base `datatran` da PRF: 5.905 acidentes, 298 mortes, 6.657 feridos (01/2024–03/2026). Motivo: a concessão passou da Arteris para a Motiva em abril/2026 e o canal que reportava acidentes em tempo real foi desativado.
+- Recorte explícito do trecho (a BR-381 são duas rodovias em MG): `UF == SP` ou `UF == MG e km ≥ 480`.
+- **No ar:** https://lucastephan15.github.io/fernao-dias-dados/ · Stack: Python · pandas · Plotly
+
+### I4. Guia de presentes — Stardew Valley ⭐ DESTAQUE
+Bilíngue PT/EN, com aniversários, receitas, rotina por estação e busca reversa. Dados isolados em `data.js` (fonte de verdade), gerados por pipeline determinístico em Python a partir da wiki.
+- **No ar:** https://lucastephan15.github.io/stardew-gift-guide/
+
+### I5. Espaço São José ⭐ DESTAQUE
+Site do projeto de revitalização de um prédio de 1910 no centro de Pouso Alegre. **O peso do case está na produção de imagem e vídeo**, não só no site.
+- **Acervo:** ~3 GB, incluindo 236 s de drone 4K que nunca tinham sido abertos — viraram a espinha do material.
+- **Limite do 3D:** a cena Twinmotion do arquiteto modelava **só o lote** — rua e vizinhança não existiam em 3D. O entorno foi gerado com IA de imagem e animado em vídeo.
+- **Regra-mãe do método:** toda imagem nasce de uma foto real do imóvel ou de um render existente, nunca do zero, e só com a referência certa anexada. Caso real: pedir "a serra ao fundo" de cabeça teria posto montanha atrás do muro do vizinho — de dentro do lote não se vê serra.
+- **Stack:** HTML/CSS · Python · Twinmotion · Nano Banana · Midjourney/Flux · Kling · CapCut · ElevenLabs · drone 4K
+- **No ar:** https://patiosaojose.info — link público **autorizado pelo Luca em 08/09/2026**, apesar do `robots: noindex` da página.
+
+### I6. LLMs and the Illusion of Rigor ⭐ DESTAQUE
+Capítulo em edição para livro organizado pela **PUC-RS**. Com Dr. Alfredo Juan Guevara Martinez e Profa. Dra. Luciana Monteiro-Krebs.
+- **Método:** experimento de "primeira camada" — Gemini 2.5 Pro, ChatGPT-4o e Claude Opus 4 instruídos, pelas interfaces nativas de chat, a aplicar um modelo de decision-mapping (Guevara, 2019) ao caso da governança global de IA.
+- **Achado:** modos de falha distintos — substituição de tarefa, alucinação metodológica e a "ilusão de rigor" (a saída mais competente simula a forma acadêmica, mas com alta taxa de citações fabricadas/distorcidas). O ônus da verificação forense recai sobre o leitor.
+- **Publicado:** ResearchGate (397001141).
+- **Pendente:** o PDF, para trocar a capa tipográfica pela 1ª página real (o ResearchGate bloqueia captura automática — confirmado em 08/09/2026).
+
+### I7. Tornando visível o design de LLMs ⭐ DESTAQUE
+TCC na FGV EAESP (2025), orientação do Prof. Gabriel Silva Cogo. Estudo eDSR do Projeto Gaia em português brasileiro.
+- **Hospedagem:** PDF no próprio site — `public/docs/tese-luca-stephan.pdf` (1,4 MB, 113 páginas).
+- **Preview:** folha de rosto (pág. 3) renderizada a 150 dpi e recortada em 16:10.
+
+### I8. Cardápio digital para casa de lámen ⭐ DESTAQUE `[em breve]`
+Cardápio digital para uma casa de lámen de grande porte em São Paulo. Entrega prevista para setembro de 2026 — o card usa o selo "Em breve" e capa tipográfica, sem link.
+
+---
+
+## Retirados do site em 08/09/2026
+TomaORemedin · Craving · Chaos Engineering como artefato DSR · **Overlay de TFT para Mac** (com a grade "Pessoal" inteira).
+
+> O overlay continua sendo a prova de OCR/extração estruturada do zero (ver E3) — está fora do site, não do repertório.
 
 ---
 
@@ -241,9 +316,14 @@ Mapa tool → cases (base para os "selos" de cada projeto):
 - [x] **Destaques definidos:** C1, B3, E1, A3 (B2 como secundário forte).
 - [x] **Títulos públicos** definidos para os 4 destaques.
 - [x] **Métricas reais** preenchidas (C1, B3, E1, A3, H1).
-- [x] **Escopo extra decidido:** sem case de tickets/NF-e dedicado — **não força**. A competência de **OCR/extração estruturada** já está comprovada (Overlay de TFT, OCR do zero + parsing de documentos do RAG, E3). Portfólio em nível sênior focado no core entregue na Amadeus.
+- [x] **Escopo extra decidido:** sem case de tickets/NF-e dedicado — **não força**. A competência de **OCR/extração estruturada** já está comprovada (Overlay de TFT, OCR do zero + parsing de documentos do RAG, E3). Portfólio em nível sênior focado no core entregue no trabalho corporativo.
 
 ## Próximos passos de build (site)
-- [ ] Nova dinâmica de **Trabalhos**: 4 destaques (com **diagrama de arquitetura** + detalhe/modal) × grade compacta para o resto.
-- [ ] **Ícones de ferramentas** por case (estilo n8n templates) — usar a *Legenda de ferramentas* acima como fonte.
-- [ ] Diagramas de arquitetura dos 4 destaques (Excalidraw/draw.io ou SVG no próprio site).
+- [x] Nova dinâmica de **Trabalhos**: destaques com diagrama/preview + modal × grade compacta para o resto.
+- [x] **Ícones de ferramentas** por case (estilo n8n templates).
+- [x] Diagramas de arquitetura em SVG (`src/data/diagrams.ts`) — 5, contando o do ERP.
+- [x] **Preview da tese** (I7) — folha de rosto renderizada do PDF.
+- [x] **Card do cardápio de lámen** (I8) — "em breve" até a entrega.
+- [x] `patiosaojose.info` (I5) — link autorizado.
+- [x] Destaques em **galeria horizontal**.
+- [ ] **Preview da 1ª página do paper** (I6) — depende do PDF.

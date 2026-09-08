@@ -41,17 +41,36 @@ body {
   color: var(--color-paper);
 }
 
-/* Reveal dos passos do AI-Ready (ativado por JS; sem JS = visível) */
-.steps-anim .step {
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
+/* Preview de diagrama no card de destaque: o SVG de arquitetura vira
+   miniatura, ocupando a largura do card sem estourar a altura. */
+.diagram-preview > svg {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  transform: scale(1.05);
 }
-.steps-anim.is-in .step {
-  opacity: 1;
-  transform: none;
+
+/* Galeria horizontal dos destaques: scrollbar discreta, rolagem suave
+   (desligada quando o usuário pede menos movimento). */
+.gallery {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.gallery::-webkit-scrollbar {
+  height: 6px;
+}
+.gallery::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+.gallery::-webkit-scrollbar-track {
+  background: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery {
+    scroll-behavior: auto;
+  }
 }
 
 /* Chip de filtro ativo (seção Trabalhos) */

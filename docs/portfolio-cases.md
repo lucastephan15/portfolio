@@ -30,13 +30,13 @@ Destaques atuais (ordem do grid):
 | # | Case | Tipo | Link |
 |---|---|---|---|
 | 1 | Espaço São José | screenshot | `patiosaojose.info` |
-| 2 | Acidentes na Fernão Dias (BR-381) | screenshot + código | GitHub Pages |
-| 3 | Guia de presentes — Stardew Valley | screenshot + código | GitHub Pages |
-| 4 | API de predição de churn em telecom | screenshot + código | `tc-churn-api.onrender.com` · repo `tc-mle-fase1` |
-| 5 | Camada de dados sobre um ERP sem API | diagrama | — |
-| 6 | LLMs and the Illusion of Rigor | capa + link | ResearchGate |
-| 7 | Tornando visível o design de LLMs (TCC) | capa (1ª pág.) + PDF | `/docs/tese-luca-stephan.pdf` |
-| 8 | Cardápio digital para casa de lámen | capa · **em breve** | — |
+| 2 | Cardápio digital para casa de lámen | screenshot | `soracardapio.online` |
+| 3 | Acidentes na Fernão Dias (BR-381) | screenshot + código | GitHub Pages |
+| 4 | Guia de presentes — Stardew Valley | screenshot + código | GitHub Pages |
+| 5 | API de predição de churn em telecom | screenshot + código | `tc-churn-api.onrender.com` · repo `tc-mle-fase1` |
+| 6 | Camada de dados sobre um ERP sem API | ilustração (diagrama segue no modal) | — |
+| 7 | LLMs and the Illusion of Rigor | capa + link | ResearchGate |
+| 8 | Tornando visível o design de LLMs (TCC) | capa (1ª pág.) + PDF | `/docs/tese-luca-stephan.pdf` |
 
 > Ordem definida pelo Luca em 08/09/2026: os três sites navegáveis abrem a galeria; o resto segue atrás.
 
@@ -269,8 +269,12 @@ TCC na FGV EAESP (2025), orientação do Prof. Gabriel Silva Cogo. Estudo eDSR d
 - **Hospedagem:** PDF no próprio site — `public/docs/tese-luca-stephan.pdf` (1,4 MB, 113 páginas).
 - **Preview:** folha de rosto (pág. 3) renderizada a 150 dpi e recortada em 16:10.
 
-### I8. Cardápio digital para casa de lámen ⭐ DESTAQUE `[em breve]`
-Cardápio digital para uma casa de lámen de grande porte em São Paulo. Entrega prevista para setembro de 2026 — o card usa o selo "Em breve" e capa tipográfica, sem link.
+### I8. Cardápio digital para casa de lámen ⭐ DESTAQUE
+- **Resumo:** cardápio digital de uma casa de lámen em São Paulo, em PT/EN/JA, com filtros por tipo de prato (com caldo, sem caldo, gelado, picante, vegetariano).
+- **Link:** https://soracardapio.online/ — no ar desde setembro de 2026.
+- **Stack:** Astro · site estático
+- **Preview:** screenshot da área do cardápio (menu de categorias, filtros e primeiros pratos), recortado em 16:10 e reduzido para 960×600.
+- **Posição:** 2º da galeria, logo depois do Espaço São José (pedido do Luca em 29/09/2026).
 
 ---
 

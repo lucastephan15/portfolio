@@ -100,6 +100,24 @@ export const cases: Case[] = [
     year: "2026",
   },
   {
+    slug: "cardapio-lamen",
+    title: "Cardápio digital para uma casa de lámen",
+    category: "Site / cardápio digital",
+    date: "Set 2026",
+    summary:
+      "Cardápio digital de uma casa de lámen em São Paulo, em português, inglês e japonês, com filtros por tipo de prato.",
+    detail:
+      "O cliente abre o cardápio no celular, direto na mesa. Os pratos ficam organizados por categoria (ramen, hiyashi, mazemen, acompanhamentos, onigiri, sobremesas e bebidas), cada um com foto, descrição e preço. Dá para filtrar por com caldo, sem caldo, gelado, picante e vegetariano, e o site está em três idiomas: português, inglês e japonês.",
+    stack: "Astro · site estático · PT/EN/JA",
+    tools: ["astro"],
+    group: "corporativo",
+    highlight: true,
+    preview: "sora-cardapio",
+    link: "https://soracardapio.online/",
+    linkLabel: "soracardapio.online",
+    year: "2026",
+  },
+  {
     slug: "fernao-dias",
     title: "Acidentes na Rodovia Fernão Dias (BR-381)",
     category: "Dados abertos",
@@ -175,6 +193,7 @@ export const cases: Case[] = [
     tools: ["python", "pandas", "streamlit"],
     group: "pessoal",
     highlight: true,
+    preview: "erp-acougue",
     diagram: "erp-acougue",
     year: "2026",
   },
@@ -216,22 +235,6 @@ export const cases: Case[] = [
     link: "/docs/tese-luca-stephan.pdf",
     linkLabel: "Ler o PDF",
     year: "2025",
-  },
-
-  {
-    slug: "cardapio-lamen",
-    title: "Cardápio digital para uma casa de lámen",
-    category: "Site / cardápio digital",
-    date: "Set 2026",
-    summary:
-      "Cardápio digital para uma casa de lámen de grande porte em São Paulo.",
-    coverTitle: "Cardápio digital",
-    coverMeta: "Entrega prevista para setembro de 2026",
-    tools: [],
-    group: "corporativo",
-    highlight: true,
-    soon: true,
-    year: "2026",
   },
 
   // ── Corporativo — grade compacta ───────────────────────────────

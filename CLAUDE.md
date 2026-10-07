@@ -30,10 +30,10 @@ Instruções de projeto para o Claude Code. Site da **Nekobit** (empresa do Luca
 ## Estrutura do site (`src/pages/index.astro`)
 Uma página com **capa → menu → 3 fases** que se "destravam":
 - **Capa:** logo + PRESS START (clique/toque/Enter/Espaço). **Menu:** 3 barras estilo HUD (`MenuBar`), seleção única controlada por script (mouse, Tab e setas ↑↓ passam pelo mesmo estado).
-- **Fases** (`src/components/fases/`), trancadas (`hidden`) até a barra ser escolhida; só uma aberta por vez:
-  - `Jogador.astro` — Home (Pouso Alegre animada) → 01 Sobre (terminal) → 02 Um pouco mais sobre mim (carrossel) → 03 Contato.
-  - `Portfolio.astro` — filtro por stack → 01 Em destaque (galeria) → 02 Corporativo (experiência anterior) + modal de case.
+- **Fases** (`src/components/fases/`), na ordem do menu (01 Nekobit · 02 Portfólio · 03 Jogador), trancadas (`hidden`) até a barra ser escolhida; só uma aberta por vez:
   - `Nekobit.astro` — abertura → 01 Quem somos → 02 O que fazemos (inventário no desktop / cards no celular) → 03 Como trabalhamos → 04 Stack (esteira) → 05 Placar → créditos (contato + ficha técnica).
+  - `Portfolio.astro` — filtro por stack → 01 Em destaque (galeria) → 02 Corporativo (experiência anterior) + modal de case.
+  - `Jogador.astro` — Home (Pouso Alegre animada) → 01 Sobre (terminal) → 02 Um pouco mais sobre mim (carrossel) → 03 Contato.
 - **O hash é a fonte da verdade:** `""` capa · `#menu` menu, tudo trancado · `#<id>` destrava a fase que contém o elemento e rola até ele. Links diretos (`/#jogador`, `/#contato`, `/#trabalhos`) e o voltar do navegador funcionam. "▲ Voltar ao menu" = `href="#menu"`.
 - Entrar numa fase pelo menu mostra a tela "Carregando fase" (~0,6 s, em passos); link direto e reduced-motion entram sem efeito.
 - **IDs são globais na página** — prefixar os novos por fase (ex.: `nekobit-contato`) para não colidir.

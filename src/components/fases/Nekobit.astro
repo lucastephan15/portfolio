@@ -1,0 +1,554 @@
+---
+// Fase "Sobre a Nekobit" — a página da empresa, no formato do manual de marca.
+// Peças aprovadas uma a uma pelo Luca (07/10/2026):
+//   abertura dividida · 01 Quem somos · 02 O que fazemos (inventário/cards) ·
+//   03 Como trabalhamos (mapa de fases) · 04 Stack (esteira) · 05 Placar · créditos.
+// Regra: nada de experiência anterior apresentado como resultado da Nekobit.
+import Logo from "../nekobit/Logo.astro";
+import PixelSprite from "../nekobit/PixelSprite.astro";
+import PixelIcon from "../nekobit/PixelIcon.astro";
+import HudHeading from "../nekobit/HudHeading.astro";
+import ToolChips from "../ToolChips.astro";
+import { servicos } from "../../data/servicos";
+import { cases, TOOLS } from "../../data/cases";
+import { isDarkIcon } from "../../lib/iconTone";
+import { SYMBOL, PALETTE } from "../../lib/pixel";
+
+const etapas = [
+  { nome: "Diagnóstico", desc: "Onde está o processo e onde estão os dados.", icone: "dados", cor: "#ff5fa2" },
+  { nome: "Desenho", desc: "Arquitetura, escopo e prazo.", icone: "ideia", cor: "#b35cff" },
+  { nome: "Construção", desc: "Entregas curtas, validadas com quem usa.", icone: "codigo", cor: "#5b7cff" },
+  { nome: "Entrega", desc: "Em produção e documentado.", icone: "check", cor: "#38d6ff" },
+] as const;
+
+const principios = [
+  { nome: "Sob medida", desc: "Feito para o processo do cliente, não o contrário.", icone: "alvo", cor: "var(--color-rosa)" },
+  { nome: "Ponta a ponta", desc: "Quem desenha é quem constrói e entrega — sem repasse.", icone: "seta", cor: "var(--color-ciano)" },
+  { nome: "Humano no circuito", desc: "Nada crítico é disparado sem aprovação.", icone: "grupo", cor: "var(--color-violeta)" },
+  { nome: "Do cliente é do cliente", desc: "Código e dados entregues pertencem a quem contrata.", icone: "negocio", cor: "var(--color-ficha)" },
+] as const;
+
+// Stack: só ferramentas que aparecem em algum trabalho do portfólio
+const used = new Set(cases.flatMap((c) => c.tools));
+const GRUPOS = [
+  { nome: "IA e agentes", cor: "var(--color-rosa)", slugs: ["openai", "anthropic", "rag", "elevenlabs", "vapi", "ocr"] },
+  { nome: "Conteúdo generativo", cor: "var(--color-violeta)", slugs: ["seedance", "seedream", "kling", "midjourney", "gemini", "twinmotion", "capcut", "drone"] },
+  { nome: "Dados e ML", cor: "var(--color-anil)", slugs: ["python", "pandas", "scikitlearn", "pytorch", "mlflow", "plotly", "streamlit", "sqlite"] },
+  { nome: "Integrações e automação", cor: "var(--color-ciano)", slugs: ["hubspot", "whatsapp", "twilio", "slack", "gmail", "googlesheets", "googlecalendar", "googledocs", "clickup", "rocketreach", "apollo", "n8n", "make", "linkedin"] },
+  { nome: "Web e cloud", cor: "var(--color-ficha)", slugs: ["astro", "nodedotjs", "fastapi", "flask", "docker", "render", "aws", "lambda", "s3", "athena", "quicksight", "swift"] },
+];
+const grupos = GRUPOS.map((g) => {
+  const slugs = g.slugs.filter((sl) => used.has(sl) && TOOLS[sl]);
+  return {
+    ...g,
+    tools: slugs.map((sl) => ({
+      ...TOOLS[sl],
+      cor: g.cor,
+      dark: TOOLS[sl].icon ? isDarkIcon(TOOLS[sl].icon!) : false,
+    })),
+  };
+});
+const usedCount = grupos.reduce((n, g) => n + g.tools.length, 0);
+const all = grupos.flatMap((g) => g.tools);
+const belt = [all.filter((_, i) => i % 2 === 0), all.filter((_, i) => i % 2 === 1)];
+
+// Placar: itens definidos pelo Luca
+const placar = [
+  { label: "Em jogo desde", mostra: "2024" },
+  { label: "Serviços", mostra: String(servicos.length).padStart(2, "0") },
+  { label: "Ferramentas", mostra: String(usedCount).padStart(2, "0") },
+  { label: "Pesquisas publicadas", mostra: "02" },
+  { label: "Prêmios acadêmicos", mostra: "02" },
+  { label: "Gente boa", mostra: "99%", nota: "das vezes" },
+];
+
+const ficha = [
+  { k: "Razão social", v: "Nekobit Desenvolvimento e Serviços em Informática Ltda." },
+  { k: "CNPJ", v: "57.255.208/0001-79" },
+  { k: "Fundação", v: "Agosto de 2024" },
+  { k: "Sede", v: "Pouso Alegre · MG" },
+  { k: "Atividade", v: "Desenvolvimento de software sob encomenda" },
+];
+
+// Exemplos do portfólio por serviço; corporativos = experiência anterior (fora da Nekobit)
+const exemplos = (slugs: string[]) =>
+  slugs
+    .map((sl) => cases.find((c) => c.slug === sl))
+    .filter((c) => !!c)
+    .map((c) => ({ title: c!.title, prev: c!.group === "corporativo" && !c!.highlight }));
+
+const pad2 = (n: number) => String(n).padStart(2, "0");
+const total = pad2(servicos.length);
+---
+
+<!-- ── Abertura ── -->
+<header class="n-cover">
+  <div class="n-wrap n-cover-grid">
+    <div>
+      <a href="#menu" class="n-menu-link font-pixel">◀ Menu</a>
+      <p class="n-kicker font-mono">03 · Sobre a Nekobit</p>
+      <h2 class="n-title font-pixel">Sobre a <span class="text-neon">Nekobit</span></h2>
+      <p class="n-tag">Software sob encomenda: sistemas de IA, agentes e automações.</p>
+      <div class="n-tags">
+        <span class="hud-tag font-mono">Pouso Alegre · MG</span>
+        <span class="hud-tag font-mono">Desde 2024</span>
+        <span class="hud-tag on font-mono">Sob encomenda</span>
+      </div>
+    </div>
+    <div class="n-appicon notch" aria-hidden="true">
+      <PixelSprite layers={[{ grid: SYMBOL, x: 2, y: 3, color: PALETTE.fliperama }]} width={11} height={11} blink />
+    </div>
+  </div>
+</header>
+
+<!-- ── 01 · Quem somos ── -->
+<section id="nekobit-quem" class="n-sec" aria-labelledby="nekobit-quem-t">
+  <div class="n-wrap">
+    <HudHeading num="01" title="Quem somos" id="nekobit-quem-t" />
+    <div class="q-a">
+      <div>
+        <p class="q-lead font-pixel">Software sob encomenda, da concepção à entrega.</p>
+        <p class="q-body">
+          A Nekobit é uma empresa de desenvolvimento de software fundada em agosto de 2024, em Pouso Alegre (MG). É
+          conduzida por <b>Luca Stephan</b>, AI Engineer, que acompanha cada projeto de ponta a ponta — sozinho ou com
+          profissionais parceiros da mesma abordagem e ritmo.
+        </p>
+      </div>
+      <div class="q-side">
+        <div class="q-eq notch">
+          <p class="q-eq-label font-mono">Por que “Nekobit”?</p>
+          <div class="q-eq-row">
+            <figure><span class="q-kanji" lang="ja">猫</span><figcaption class="font-mono">neko · gato</figcaption></figure>
+            <span class="q-op font-pixel" aria-hidden="true">+</span>
+            <figure><span class="q-bit" aria-hidden="true"></span><figcaption class="font-mono">bit</figcaption></figure>
+            <span class="q-op font-pixel" aria-hidden="true">=</span>
+            <figure><span class="q-sym"><Logo variant="symbol" /></span><figcaption class="font-mono">gato-bit</figcaption></figure>
+          </div>
+        </div>
+        <a href="#jogador" class="q-card notch">
+          <img src="/images/nekobit/retrato-jogador.webp" alt="" width="72" height="72" loading="lazy" />
+          <span>
+            <span class="q-card-k font-mono">Fundador</span>
+            <span class="q-card-n font-pixel">Luca Stephan</span>
+            <span class="q-card-r font-mono">AI Engineer</span>
+            <span class="q-card-go font-pixel">Ver ficha do jogador ›</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 · O que fazemos ── -->
+<section id="nekobit-servicos" class="n-sec" aria-labelledby="nekobit-servicos-t">
+  <div class="n-wrap">
+    <HudHeading num="02" title="O que fazemos" id="nekobit-servicos-t" />
+
+    <!-- Desktop: inventário (lista + ficha do item selecionado) -->
+    <div class="only-desk">
+      <div class="s-inv" data-inv>
+        <div class="s-inv-list" role="tablist" aria-label="Serviços" aria-orientation="vertical">
+          {
+            servicos.map((sv, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`srv-tab-${sv.id}`}
+                aria-controls={`srv-panel-${sv.id}`}
+                aria-selected={i === 0 ? "true" : "false"}
+                tabindex={i === 0 ? 0 : -1}
+                class="s-slot"
+                data-tab={sv.id}
+                style={`--c:${sv.cor}`}
+              >
+                <span class="s-num font-mono">{pad2(i + 1)}</span>
+                <PixelIcon name={sv.icone} color={sv.cor} />
+                <span class="s-slot-name font-pixel">{sv.nome}</span>
+              </button>
+            ))
+          }
+        </div>
+        {
+          servicos.map((sv, i) => (
+            <article
+              class="s-panel notch"
+              role="tabpanel"
+              id={`srv-panel-${sv.id}`}
+              aria-labelledby={`srv-tab-${sv.id}`}
+              data-panel={sv.id}
+              hidden={i !== 0}
+              style={`--c:${sv.cor}`}
+            >
+              <div class="s-panel-head">
+                <span class="s-panel-icon">
+                  <PixelIcon name={sv.icone} color={sv.cor} />
+                </span>
+                <div>
+                  <p class="s-kick font-mono">
+                    Serviço {pad2(i + 1)} / {total}
+                  </p>
+                  <h3 class="s-panel-name font-pixel">{sv.nome}</h3>
+                </div>
+              </div>
+              <p class="s-panel-task">{sv.tarefa}</p>
+              <div class="s-flow">
+                <div class="s-flow-box">
+                  <span class="font-mono">Entrada</span>
+                  {sv.entrada}
+                </div>
+                <span class="s-flow-arrow font-pixel" aria-hidden="true">▶</span>
+                <div class="s-flow-box out">
+                  <span class="font-mono">Saída</span>
+                  {sv.saida}
+                </div>
+              </div>
+              <p class="s-sub font-mono">Stack</p>
+              <ToolChips tools={sv.tools} />
+              <p class="s-sub font-mono">No portfólio</p>
+              <p class="s-cases">
+                {exemplos(sv.cases).map((e) => (
+                  <a href="#trabalhos" class="s-case">
+                    {e.title}
+                    {e.prev && <span class="s-prev font-mono">exp. anterior</span>}
+                  </a>
+                ))}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Celular: cards -->
+    <div class="only-mob">
+      <div class="s-grid">
+        {
+          servicos.map((sv, i) => (
+            <article class:list={["s-card notch", { "s-first": i === 0 }]} style={`--c:${sv.cor}`}>
+              <div class="s-card-head">
+                <PixelIcon name={sv.icone} color={sv.cor} />
+                <span class="s-num font-mono">{pad2(i + 1)}</span>
+              </div>
+              <h3 class="s-name font-pixel">{sv.nome}</h3>
+              <p class="s-task">{sv.tarefa}</p>
+              <p class="s-io font-mono">
+                <span>{sv.entrada}</span>
+                <b aria-hidden="true">▶</b>
+                <span>{sv.saida}</span>
+              </p>
+              <ToolChips tools={sv.tools.slice(0, 4)} />
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 · Como trabalhamos ── -->
+<section id="nekobit-como" class="n-sec" aria-labelledby="nekobit-como-t">
+  <div class="n-wrap">
+    <HudHeading num="03" title="Como trabalhamos" id="nekobit-como-t" />
+    <ol class="w-map">
+      {
+        etapas.map((e, i) => (
+          <li class="w-node" style={`--c:${e.cor}`}>
+            <span class="w-tile notch">
+              <PixelIcon name={e.icone} color="var(--color-fliperama)" />
+            </span>
+            <span class="w-lvl font-mono">Fase {i + 1}</span>
+            <span class="w-name font-pixel">{e.nome}</span>
+            <span class="w-desc">{e.desc}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="w-sub font-mono">Regras do jogo</p>
+    <ul class="w-rules">
+      {
+        principios.map((pr) => (
+          <li>
+            <PixelIcon name={pr.icone} color={pr.cor} />
+            <span>
+              <b class="font-pixel">{pr.nome}</b>
+              {pr.desc}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ── 04 · Stack ── -->
+<section id="nekobit-stack" class="n-sec" aria-labelledby="nekobit-stack-t">
+  <div class="n-wrap">
+    <HudHeading num="04" title="Stack" id="nekobit-stack-t" />
+    <p class="c5-lead">Ferramentas que já usamos em produção ou em projetos publicados.</p>
+  </div>
+  <div class="c5-belts" aria-label={`${usedCount} ferramentas`}>
+    {
+      [0, 1].map((row) => (
+        <div class:list={["c5-belt", { rev: row === 1 }]}>
+          <div class="c5-track">
+            {[...belt[row], ...belt[row]].map((t, i) => (
+              <span class="c5-item notch" style={`--g:${t.cor}`} aria-hidden={i >= belt[row].length ? "true" : undefined}>
+                {t.icon && (
+                  <img src={`/images/icons/${t.icon}.svg`} alt="" width="20" height="20" loading="lazy" class:list={{ "icon-light": t.dark }} />
+                )}
+                <span class="font-pixel">{t.name}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <div class="n-wrap c5-legend">
+    {
+      grupos.map((g) => (
+        <span class="font-mono">
+          <i style={`background:${g.cor}`} />
+          {g.nome}
+        </span>
+      ))
+    }
+  </div>
+</section>
+
+<!-- ── 05 · Placar ── -->
+<section id="nekobit-placar" class="n-sec" aria-labelledby="nekobit-placar-t">
+  <div class="n-wrap">
+    <HudHeading num="05" title="Placar" id="nekobit-placar-t" />
+    <div class="s6 notch">
+      <p class="s6-banner font-pixel">★ Fase concluída ★</p>
+      <ul class="s6-list font-mono">
+        {
+          placar.map((p) => (
+            <li>
+              <span>{p.label}</span>
+              <i aria-hidden="true" />
+              <b class="font-pixel">
+                {p.mostra}
+                {p.nota && <small class="font-mono"> {p.nota}</small>}
+              </b>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="#nekobit-contato" class="s6-foot font-mono"><span class="blink-step" aria-hidden="true">▶</span> Continuar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Créditos: contato + ficha técnica ── -->
+<section id="nekobit-contato" class="n-sec t7b" aria-label="Contato e ficha técnica">
+  <div class="n-wrap">
+    <div class="t7b-roll">
+      <p class="t7b-k font-mono">Contato</p>
+      <a href="mailto:nekobit.io@gmail.com" class="t7b-mail font-pixel">nekobit.io@gmail.com</a>
+      {
+        ficha.map((f) => (
+          <div class="t7b-item">
+            <p class="t7b-k font-mono">{f.k}</p>
+            <p class="t7b-v">{f.v}</p>
+          </div>
+        ))
+      }
+      <div class="t7b-logo"><Logo /></div>
+      <p class="t7b-thanks font-pixel">Obrigado por jogar!</p>
+      <a href="#menu" class="btn-px">▲ Voltar ao menu</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .n-wrap { max-width: 1152px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 768px) { .n-wrap { padding: 0 40px; } }
+  .n-sec { padding: 96px 0; border-top: 2px solid var(--color-grade); }
+  .icon-light { filter: brightness(0) invert(1); opacity: 0.9; }
+
+  /* ── Abertura ── */
+  .n-cover {
+    padding: 24px 0 80px;
+    background-color: var(--color-fliperama);
+    background-image: linear-gradient(var(--color-grade) 1px, transparent 1px), linear-gradient(90deg, var(--color-grade) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .n-cover-grid { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 860px) { .n-cover-grid { grid-template-columns: 1fr 340px; } }
+  .n-menu-link { display: inline-block; margin-bottom: 40px; padding: 8px 0; font-size: 22px; color: var(--color-ficha); text-decoration: none; }
+  .n-kicker { margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ciano); }
+  .n-title { margin: 8px 0 16px; font-size: clamp(52px, 9vw, 96px); font-weight: 400; line-height: 0.95; }
+  .n-tag { margin: 0; max-width: 560px; font-size: clamp(18px, 2.2vw, 22px); line-height: 1.5; color: #d9d2f5; }
+  .n-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .hud-tag { padding: 4px 10px; font-size: 12px; background: var(--color-fliperama); box-shadow: inset 0 0 0 2px var(--color-grade); }
+  .hud-tag.on { color: var(--color-ciano); box-shadow: inset 0 0 0 2px var(--color-ciano); }
+  .n-appicon {
+    --u: 28px;
+    justify-self: center;
+    background: linear-gradient(135deg, var(--color-rosa), var(--color-violeta), var(--color-anil), var(--color-ciano));
+    box-shadow: 8px 8px 0 var(--color-grade);
+  }
+  @media (max-width: 859px) { .n-appicon { --u: 18px; } }
+
+  /* ── 01 Quem somos ── */
+  .q-a { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 900px) { .q-a { grid-template-columns: 1.2fr 1fr; gap: 56px; } }
+  .q-lead { margin: 0 0 20px; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.05; }
+  .q-body { margin: 0; max-width: 620px; font-size: 17px; line-height: 1.7; color: #d9d2f5; }
+  .q-body b { color: var(--color-fosforo); font-weight: 600; }
+  .q-side { display: grid; gap: 16px; }
+  .q-eq { background: var(--color-tela); padding: 24px; }
+  .q-eq-label { margin: 0 0 20px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ficha); }
+  .q-eq-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .q-eq-row figure { margin: 0; display: grid; justify-items: center; gap: 10px; }
+  .q-eq-row figcaption { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-nevoa); }
+  .q-kanji { font-size: 52px; line-height: 1; color: var(--color-rosa); font-family: serif; }
+  .q-bit { display: block; width: 44px; height: 44px; background: var(--color-ciano); }
+  .q-sym { --u: 7px; display: block; }
+  .q-op { font-size: 32px; color: var(--color-nevoa); }
+  .q-card { display: flex; align-items: center; gap: 18px; padding: 18px; background: var(--color-tela); box-shadow: inset 0 0 0 2px var(--color-grade); color: inherit; text-decoration: none; }
+  .q-card:hover,
+  .q-card:focus-visible { box-shadow: inset 0 0 0 2px var(--color-ciano); outline: none; }
+  .q-card img { width: 108px; height: 108px; image-rendering: pixelated; background: var(--color-fliperama); box-shadow: inset 0 0 0 2px var(--color-grade); flex: none; }
+  .q-card > span { display: grid; gap: 2px; }
+  .q-card-k { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ficha); }
+  .q-card-n { font-size: 28px; line-height: 1.05; }
+  .q-card-r { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-ciano); }
+  .q-card-go { margin-top: 10px; font-size: 18px; color: var(--color-nevoa); }
+  .q-card:hover .q-card-go { color: var(--color-ficha); }
+
+  /* ── 02 O que fazemos ── */
+  .only-mob { display: none; }
+  @media (max-width: 899px) { .only-desk { display: none; } .only-mob { display: block; } }
+  .s-num { font-size: 11px; color: var(--color-nevoa); }
+  .s-name { margin: 0; font-size: 26px; line-height: 1.05; font-weight: 400; }
+  .s-task { margin: 0; font-size: 15px; line-height: 1.55; color: #d9d2f5; }
+  .s-case { display: inline-flex; align-items: center; gap: 8px; color: var(--color-fosforo); text-decoration: none; border-bottom: 2px solid var(--color-grade); padding-bottom: 2px; margin: 0 14px 8px 0; }
+  .s-case:hover { color: var(--color-ciano); border-color: var(--color-ciano); }
+  .s-prev { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ficha); }
+  /* inventário */
+  .s-inv { display: grid; grid-template-columns: 360px 1fr; gap: 16px; align-items: start; }
+  .s-inv-list { display: grid; gap: 6px; }
+  .s-slot { display: grid; grid-template-columns: 22px 28px 1fr; align-items: center; gap: 12px; padding: 12px 14px; text-align: left; color: var(--color-fosforo); background: var(--color-fliperama); border: 0; box-shadow: inset 0 0 0 2px var(--color-grade); cursor: pointer; }
+  .s-slot :global(.px-icon) { --u: 4px; }
+  .s-slot-name { font-size: 20px; line-height: 1.05; }
+  .s-slot:hover { box-shadow: inset 0 0 0 2px var(--c); }
+  .s-slot:focus-visible { outline: 2px solid var(--color-ficha); outline-offset: 2px; }
+  .s-slot[aria-selected="true"] { background: var(--color-tela); box-shadow: inset 0 0 0 2px var(--c), inset 6px 0 0 var(--c); }
+  .s-panel { background: var(--color-tela); padding: 28px; box-shadow: inset 0 0 0 2px var(--c); }
+  .s-panel-head { display: flex; align-items: center; gap: 18px; }
+  .s-panel-icon { display: grid; place-items: center; width: 72px; height: 72px; background: var(--color-fliperama); box-shadow: inset 0 0 0 2px var(--color-grade); flex: none; }
+  .s-panel-icon :global(.px-icon) { --u: 6px; }
+  .s-kick { margin: 0; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+  .s-panel-name { margin: 4px 0 0; font-size: clamp(28px, 3.4vw, 38px); line-height: 1.05; font-weight: 400; }
+  .s-panel-task { margin: 20px 0; font-size: 18px; line-height: 1.5; }
+  .s-flow { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+  .s-flow-box { display: grid; gap: 4px; padding: 12px 14px; background: var(--color-fliperama); box-shadow: inset 0 0 0 2px var(--color-grade); color: #d9d2f5; font-size: 14px; }
+  .s-flow-box span { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-nevoa); }
+  .s-flow-box.out { box-shadow: inset 0 0 0 2px var(--c); }
+  .s-flow-arrow { align-self: center; justify-self: center; color: var(--c); font-size: 22px; }
+  .s-sub { margin: 24px 0 10px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-nevoa); }
+  .s-cases { margin: 0; }
+  /* cards (celular) */
+  .s-grid { display: grid; gap: 16px; }
+  @media (min-width: 680px) { .s-grid { grid-template-columns: repeat(2, 1fr); } }
+  .s-card { display: flex; flex-direction: column; gap: 12px; padding: 22px; background: var(--color-tela); box-shadow: inset 0 0 0 2px var(--color-grade), inset 0 4px 0 var(--c); }
+  .s-card.s-first { grid-column: 1 / -1; }
+  .s-card-head { display: flex; justify-content: space-between; align-items: center; }
+  .s-card :global(.px-icon) { --u: 4px; }
+  .s-io { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 4px; font-size: 11px; color: var(--color-nevoa); }
+  .s-io b { color: var(--c); font-weight: 400; }
+
+  /* ── 03 Como trabalhamos ── */
+  .w-map { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; position: relative; }
+  @media (min-width: 860px) {
+    .w-map { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .w-map::before { content: ""; position: absolute; top: 36px; left: 12%; right: 12%; border-top: 4px dashed var(--color-grade); }
+  }
+  .w-node { position: relative; display: grid; justify-items: center; align-content: start; text-align: center; gap: 6px; }
+  .w-tile { display: grid; place-items: center; width: 72px; height: 72px; background: var(--c); box-shadow: 4px 4px 0 var(--color-grade); margin-bottom: 8px; }
+  .w-tile :global(.px-icon) { --u: 5px; }
+  .w-lvl { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+  .w-name { font-size: 28px; line-height: 1; }
+  .w-desc { max-width: 220px; font-size: 14px; color: var(--color-nevoa); }
+  .w-sub { margin: 64px 0 16px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ficha); text-align: center; }
+  .w-rules { list-style: none; margin: 0 auto; padding: 0; max-width: 900px; display: grid; gap: 12px 32px; }
+  @media (min-width: 760px) { .w-rules { grid-template-columns: 1fr 1fr; } }
+  .w-rules li { display: flex; gap: 14px; align-items: flex-start; }
+  .w-rules li :global(.px-icon) { --u: 4px; margin-top: 2px; }
+  .w-rules li > span { display: grid; gap: 2px; font-size: 14px; color: var(--color-nevoa); }
+  .w-rules b { font-size: 22px; font-weight: 400; color: var(--color-fosforo); }
+
+  /* ── 04 Stack (esteira) ── */
+  .c5-lead { margin: -8px 0 32px; color: var(--color-nevoa); }
+  .c5-belts {
+    display: grid;
+    gap: 12px;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .c5-track { display: flex; gap: 12px; width: max-content; animation: belt 40s steps(160) infinite; }
+  .c5-belt.rev .c5-track { animation-direction: reverse; }
+  .c5-belts:hover .c5-track { animation-play-state: paused; }
+  @keyframes belt { to { transform: translateX(-50%); } }
+  .c5-item { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px 12px 22px; background: var(--color-tela); box-shadow: inset 0 0 0 2px var(--color-grade), inset 6px 0 0 var(--g); white-space: nowrap; }
+  .c5-item .font-pixel { font-size: 20px; }
+  .c5-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 24px; }
+  .c5-legend span { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-nevoa); }
+  .c5-legend i { width: 10px; height: 10px; }
+  /* Movimento reduzido: esteira vira lista parada (sem as cópias) */
+  @media (prefers-reduced-motion: reduce) {
+    .c5-track { animation: none; flex-wrap: wrap; width: auto; padding: 0 24px; }
+    .c5-item[aria-hidden="true"] { display: none; }
+    .c5-belts { mask-image: none; -webkit-mask-image: none; }
+  }
+
+  /* ── 05 Placar ── */
+  .s6 { max-width: 680px; margin: 0 auto; padding: 32px clamp(20px, 5vw, 48px); background: var(--color-tela); box-shadow: inset 0 0 0 2px var(--color-ficha), 8px 8px 0 var(--color-grade); text-align: center; }
+  .s6-banner { margin: 0 0 28px; font-size: clamp(30px, 5vw, 44px); color: var(--color-ficha); }
+  .s6-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; text-align: left; }
+  .s6-list li { display: flex; align-items: baseline; gap: 10px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #d9d2f5; }
+  .s6-list i { flex: 1; border-bottom: 2px dotted var(--color-grade); transform: translateY(-4px); }
+  .s6-list b { font-size: 34px; font-weight: 400; letter-spacing: 0; color: var(--color-fosforo); white-space: nowrap; }
+  .s6-list b small { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-nevoa); }
+  .s6-foot { display: inline-block; margin: 28px 0 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ficha); text-decoration: none; }
+  .s6-foot:hover { color: var(--color-fosforo); }
+
+  /* ── Créditos ── */
+  .t7b { background: linear-gradient(to bottom, var(--color-fliperama), #120d2b); }
+  .t7b-roll { display: grid; justify-items: center; text-align: center; gap: 22px; padding: 24px 0 16px; }
+  .t7b-k { margin: 0; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ficha); }
+  .t7b-mail { margin-top: -14px; font-size: clamp(28px, 4.5vw, 44px); color: var(--color-ciano); text-decoration: none; word-break: break-all; }
+  .t7b-mail:hover { color: var(--color-fosforo); }
+  .t7b-item { display: grid; gap: 4px; }
+  .t7b-v { margin: 0; font-size: 17px; color: var(--color-fosforo); }
+  .t7b-logo { --u: 6px; margin-top: 32px; }
+  .t7b-thanks { margin: 0; font-size: clamp(26px, 4vw, 36px); color: var(--color-rosa); }
+</style>
+
+<script>
+  // Inventário de serviços: abas (uma selecionada por vez) com setas ↑↓.
+  document.querySelectorAll<HTMLElement>("[data-inv]").forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-tab]")];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+    const show = (i: number, focus = false) => {
+      tabs.forEach((t, j) => {
+        t.setAttribute("aria-selected", j === i ? "true" : "false");
+        t.tabIndex = j === i ? 0 : -1;
+      });
+      panels.forEach((p) => (p.hidden = p.dataset.panel !== tabs[i].dataset.tab));
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => show(i));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+        e.preventDefault();
+        show((i + (e.key === "ArrowDown" ? 1 : -1) + tabs.length) % tabs.length, true);
+      });
+    });
+  });
+</script>

@@ -1,0 +1,57 @@
+---
+// Cabeçalho de seção estilo HUD: "01  Título ────────" (régua neon).
+interface Props {
+  num: string;
+  title: string;
+  aside?: string; // rótulo à direita (opcional)
+  id?: string;
+}
+const { num, title, aside, id } = Astro.props;
+---
+
+<div class="hud">
+  <span class="hud-num font-mono">{num}</span>
+  <h2 class="hud-title font-pixel" id={id}>{title}</h2>
+  <span class="hud-bar bg-neon" aria-hidden="true"></span>
+  {aside && <span class="hud-aside font-mono">{aside}</span>}
+</div>
+
+<style>
+  .hud {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .hud-num {
+    font-size: 13px;
+    color: var(--color-ficha);
+  }
+  .hud-title {
+    margin: 0;
+    font-size: clamp(34px, 6vw, 48px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-fosforo);
+  }
+  .hud-bar {
+    flex: 1;
+    min-width: 24px;
+    height: 4px;
+    align-self: center;
+  }
+  .hud-aside {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-nevoa);
+  }
+  /* Celular: número + título na mesma linha (o título quebra sozinho),
+     régua neon em linha própria embaixo. */
+  @media (max-width: 640px) {
+    .hud { flex-wrap: wrap; row-gap: 14px; gap: 12px; }
+    .hud-title { flex: 1 1 0; min-width: 0; }
+    .hud-bar { flex-basis: 100%; }
+    .hud-aside { display: none; }
+  }
+</style>

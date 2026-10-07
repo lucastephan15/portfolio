@@ -1,0 +1,172 @@
+---
+// Barra do menu inicial (estilo HUD: retrato + barra de vida em degraus).
+// Seleção: SÓ pela classe .is-selected, que o menu controla por script —
+// mouse, toque, Tab e setas mexem no mesmo estado, então nunca há duas
+// barras selecionadas ao mesmo tempo.
+
+interface Props {
+  href: string;
+  kicker: string; // rótulo mono: "01 · Jogador"
+  title: string;
+  sub?: string;
+  portrait?: string; // imagem pixel (72×72); sem ela, usa o slot "icon"
+  selected?: boolean;
+}
+
+const { href, kicker, title, sub, portrait, selected = false } = Astro.props;
+---
+
+<a href={href} class:list={["mbar", { "is-selected": selected }]}>
+  <span class="mbar-cursor font-pixel" aria-hidden="true">▶</span>
+  <span class="mbar-frame notch">
+    <span class="mbar-body notch">
+      <span class="mbar-portrait">
+        {portrait ? <img src={portrait} alt="" width="72" height="72" /> : <slot name="icon" />}
+      </span>
+      <span class="mbar-text">
+        <span class="mbar-kicker font-mono">{kicker}</span>
+        <span class="mbar-title font-pixel">{title}</span>
+        <span class="mbar-hp notch" aria-hidden="true"><span></span></span>
+        {sub && <span class="mbar-sub font-mono">{sub}</span>}
+      </span>
+      <span class="mbar-arrow font-pixel" aria-hidden="true">›</span>
+    </span>
+  </span>
+</a>
+
+<style>
+  .mbar {
+    --steps-6: #ff5fa2 0 16.6%, #d15dda 16.6% 33.3%, #a162ff 33.3% 50%, #6d76ff 50% 66.6%, #4da0ff 66.6% 83.3%, #38d6ff 83.3%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-fosforo);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* O destaque visual é o .is-selected (que acompanha o foco) */
+  .mbar:focus-visible {
+    outline: none;
+  }
+  .mbar-cursor {
+    flex: none;
+    width: 14px;
+    color: var(--color-ficha);
+    font-size: 16px;
+    visibility: hidden;
+  }
+  .mbar-frame {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    padding: 2px;
+    background: var(--color-grade);
+  }
+  .mbar-body {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px 12px 12px;
+    background: var(--color-tela);
+  }
+  .mbar-portrait {
+    flex: none;
+    width: 72px;
+    height: 72px;
+    display: grid;
+    place-items: center;
+    background: var(--color-fliperama);
+    box-shadow: inset 0 0 0 2px var(--color-grade);
+  }
+  .mbar-portrait :global(img),
+  .mbar-portrait :global(svg) {
+    display: block;
+    image-rendering: pixelated;
+  }
+  .mbar-text {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+  }
+  .mbar-kicker {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-nevoa);
+  }
+  .mbar-title {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+  }
+  /* Barra de vida: apagada; enche em 6 passos ao selecionar */
+  .mbar-hp {
+    display: block;
+    height: 12px;
+    padding: 2px;
+    background: var(--color-fliperama);
+    margin: 4px 0 2px;
+  }
+  .mbar-hp span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--steps-6));
+    opacity: 0.35;
+  }
+  .mbar-sub {
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-nevoa);
+  }
+  .mbar-arrow {
+    flex: none;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--color-grade);
+  }
+
+  /* ── Selecionada ── */
+  .mbar.is-selected .mbar-cursor {
+    visibility: visible;
+    animation: mbar-blink 0.8s steps(1) infinite;
+  }
+  .mbar.is-selected .mbar-frame {
+    background: linear-gradient(180deg, var(--steps-6));
+    transform: translateX(4px);
+  }
+  .mbar.is-selected .mbar-kicker {
+    color: var(--color-ciano);
+  }
+  .mbar.is-selected .mbar-hp span {
+    opacity: 1;
+    animation: mbar-fill 0.5s steps(6) 1;
+  }
+  .mbar.is-selected .mbar-arrow {
+    color: var(--color-ficha);
+  }
+  .mbar.is-selected:active .mbar-frame {
+    transform: translateX(8px);
+  }
+  @keyframes mbar-blink {
+    50% { opacity: 0; }
+  }
+  @keyframes mbar-fill {
+    from { width: 0; }
+  }
+
+  @media (max-width: 420px) {
+    .mbar-body { gap: 12px; padding: 10px 12px 10px 10px; }
+    .mbar-title { font-size: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mbar.is-selected .mbar-cursor,
+    .mbar.is-selected .mbar-hp span {
+      animation: none;
+    }
+  }
+</style>

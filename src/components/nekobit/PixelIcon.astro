@@ -1,0 +1,25 @@
+---
+// Ícone pixel 7×7 numa cor. Tamanho = 7 × --u (padrão 4px → 28px).
+import PixelSprite from "./PixelSprite.astro";
+import { ICONS } from "../../lib/icons";
+
+interface Props {
+  name: keyof typeof ICONS;
+  color?: string;
+  class?: string;
+}
+const { name, color = "var(--color-ciano)", class: cls } = Astro.props;
+---
+
+<span class:list={["px-icon", cls]} style={`--icon-color:${color}`}>
+  <PixelSprite layers={[{ grid: ICONS[name], color: "currentColor" }]} width={7} height={7} />
+</span>
+
+<style>
+  .px-icon {
+    display: inline-block;
+    flex: none;
+    color: var(--icon-color);
+    --u: 4px;
+  }
+</style>

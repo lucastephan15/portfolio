@@ -1,16 +1,16 @@
-/* Diagramas de arquitetura dos cases em destaque (SVG inline, tema editorial).
+/* Diagramas de arquitetura dos cases em destaque (SVG inline, tema arcade Nekobit).
    Renderizados no modal via set:html. Responsivos (viewBox + width:100%).
-   As setas usam um marcador compartilhado #dgArrow (definido uma vez no index). */
+   As setas usam um marcador compartilhado #dgArrow (definido uma vez na fase Portfólio). */
 
 const style = `
   <style>
-    .box { fill:#faf9f6; stroke:#d8d2c4; stroke-width:1.5; }
-    .acc { fill:#fbeeea; stroke:#9a3b2e; stroke-width:1.5; }
-    .sink{ fill:#f1efe8; stroke:#d8d2c4; stroke-width:1.5; }
-    .lbl { font:600 13px ui-sans-serif,system-ui,sans-serif; fill:#1a1a1a; }
-    .sub { font:11px ui-sans-serif,system-ui,sans-serif; fill:#6f6c64; }
-    .note{ font:11px ui-sans-serif,system-ui,sans-serif; fill:#6f6c64; }
-    .edge{ fill:none; stroke:#9a8f80; stroke-width:1.5; }
+    .box { fill:#1b1538; stroke:#2e2657; stroke-width:2; }
+    .acc { fill:#2a1540; stroke:#ff5fa2; stroke-width:2; }
+    .sink{ fill:#0d0a1f; stroke:#38d6ff; stroke-width:2; }
+    .lbl { font:600 13px Inter,ui-sans-serif,system-ui,sans-serif; fill:#f3eeff; }
+    .sub { font:11px Inter,ui-sans-serif,system-ui,sans-serif; fill:#9d94c7; }
+    .note{ font:11px "JetBrains Mono",ui-monospace,monospace; fill:#9d94c7; }
+    .edge{ fill:none; stroke:#6d76ff; stroke-width:1.5; }
   </style>`;
 
 const A = 'marker-end="url(#dgArrow)"';

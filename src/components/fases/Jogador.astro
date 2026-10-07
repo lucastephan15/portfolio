@@ -1,0 +1,560 @@
+---
+// Fase "Jogador": Home → 01 Sobre → 02 Um pouco mais sobre mim → 03 Contato.
+// Conteúdo idêntico ao currículo anterior; só muda a pele (arcade Nekobit).
+import HudHeading from "../nekobit/HudHeading.astro";
+import { aboutSlides } from "../../data/about";
+
+const nav = [
+  { label: "Sobre", href: "#sobre" },
+  { label: "Mais sobre mim", href: "#mais-sobre" },
+  { label: "Contato", href: "#contato" },
+];
+---
+
+<!-- ── Home: Pouso Alegre animada (Pixel Lab) ─────────────────── -->
+<div class="j-hero">
+  <img
+    src="/images/pouso-alegre-hero.webp"
+    alt="Pouso Alegre em pixel art — a praça da catedral, animada"
+    width="384"
+    height="216"
+    loading="lazy"
+    class="hero-anim j-hero-bg"
+    style="image-rendering: pixelated;"
+  />
+  <img
+    src="/images/pouso-alegre-hero-static.png"
+    alt="Pouso Alegre em pixel art — a praça da catedral"
+    width="384"
+    height="216"
+    loading="lazy"
+    class="hero-static j-hero-bg"
+    style="image-rendering: pixelated;"
+  />
+  <div class="j-hero-scrim" aria-hidden="true"></div>
+
+  <header class="j-wrap j-top">
+    <a href="#menu" class="j-menu-link font-pixel">◀ Menu</a>
+    <nav class="j-nav font-mono" aria-label="Seções do Jogador">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </header>
+
+  <div class="j-wrap j-hero-body">
+    <p class="j-kicker font-mono">AI Engineer · Automações · Pouso Alegre, BR</p>
+    <h2 class="j-hero-title font-pixel">
+      Construo <span class="text-neon">sistemas de IA</span> e
+      <span class="j-ciano">automações</span> sob medida — do dado não estruturado ao produto final.
+    </h2>
+    <div class="j-actions">
+      <a href="#contato" class="btn-px ghost">Entrar em contato</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── 01 · Sobre ─────────────────────────────────────────────── -->
+<section id="sobre" class="j-section" aria-labelledby="sobre-titulo">
+  <div class="j-wrap">
+    <HudHeading num="01" title="Sobre" id="sobre-titulo" />
+    <div class="j-sobre">
+      <img
+        src="/images/wizard-luca.webp"
+        alt="Luca como um mago pixel art, meditando"
+        width="256"
+        height="256"
+        loading="lazy"
+        class="j-wizard"
+        style="image-rendering: pixelated;"
+      />
+
+      <!-- Terminal: mesmo conteúdo do texto "Sobre" + Formação + Reconhecimentos -->
+      <div class="term notch" data-term>
+        <div class="term-bar font-mono" aria-hidden="true">
+          <span class="term-dots"><i></i><i></i><i></i></span>luca@nekobit: ~
+        </div>
+        <div class="term-body font-mono">
+          <p class="cmd"><span class="p">$</span> whoami</p>
+          <p class="out">luca — <span class="k">AI Engineer</span>: <span class="k">negócio</span> + <span class="k">código</span></p>
+
+          <p class="cmd"><span class="p">$</span> cat formacao.txt</p>
+          <dl class="kv">
+            <dt>pós · machine learning engineering</dt>
+            <dd><span class="s">FIAP</span> · 2025–2027 <span class="dim">(em curso)</span></dd>
+            <dt>intercâmbio</dt>
+            <dd><span class="s">HEC Paris</span> · 2023–2024 <span class="badge">#1 escola de negócios da Europa · FT 2023</span></dd>
+            <dt>administração de empresas</dt>
+            <dd><span class="s">FGV EAESP</span> · 2020–2025</dd>
+            <dt>foco</dt>
+            <dd><span class="s">empreendedorismo, programação, estatística</span></dd>
+          </dl>
+
+          <p class="cmd"><span class="p">$</span> cat conquistas.txt</p>
+          <p class="out"><span class="k">★ Quadro de Honra · FGV EAESP</span> — entre os 10 melhores alunos do semestre: 3º lugar (2020.2) e 9º lugar (2021.2)</p>
+
+          <p class="cmd"><span class="p">$</span> ./construir --sob-medida</p>
+          <p class="out"><span class="a">→</span> sistemas de IA · agentes · automações</p>
+          <p class="out"><span class="a">→</span> entrada: dados como a empresa organiza ou armazena</p>
+          <p class="out"><span class="a">→</span> fluxo: concepção ─▶ entrega, ponta a ponta</p>
+          <p class="out"><span class="a">→</span> time: solo ou com profissionais da mesma abordagem e ritmo</p>
+          <p class="ok">✔ altamente personalizado &nbsp;✔ prazo curto &nbsp;✔ sem fricção de repasse</p>
+
+          <p class="cmd"><span class="p">$</span> <span class="blink-step">█</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 · Um pouco mais sobre mim (carrossel) ───────────────── -->
+<section id="mais-sobre" class="j-section" aria-labelledby="mais-sobre-titulo">
+  <div class="j-wrap">
+    <HudHeading num="02" title="Um pouco mais sobre mim" aside="Fora do código" id="mais-sobre-titulo" />
+
+    <div class="j-carousel-frame notch">
+      <div
+        class="j-carousel notch"
+        data-carousel
+        aria-roledescription="carrossel"
+        aria-label="Um pouco mais sobre mim"
+      >
+        <div class="j-track" data-track>
+          {
+            aboutSlides.map((s, i) => (
+              <figure role="group" aria-roledescription="slide" aria-label={`${i + 1} de ${aboutSlides.length}`}>
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  width="1280"
+                  height="720"
+                  loading="lazy"
+                  style="image-rendering: pixelated;"
+                />
+                <figcaption>
+                  <span class="j-slide-title font-pixel">{s.title}</span>
+                  {s.caption && <span class="j-slide-caption">{s.caption}</span>}
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+
+        <button type="button" data-prev aria-label="Anterior" class="j-arrow j-arrow-prev font-pixel">‹</button>
+        <button type="button" data-next aria-label="Próximo" class="j-arrow j-arrow-next font-pixel">›</button>
+
+        <div class="j-dots" data-dots>
+          {aboutSlides.map((_, i) => <button type="button" data-dot={i} aria-label={`Ir para o slide ${i + 1}`} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 · Contato ───────────────────────────────────────────── -->
+<section id="contato" class="j-section j-contato" aria-labelledby="contato-titulo">
+  <div class="j-wrap">
+    <HudHeading num="03" title="Contato" id="contato-titulo" />
+    <p class="j-contato-title font-pixel">Vamos construir algo juntos?</p>
+    <div class="j-actions">
+      <a href="mailto:lucastephan8@gmail.com" class="btn-px">lucastephan8@gmail.com</a>
+      <a href="https://github.com/lucastephan15" class="btn-px ghost">GitHub</a>
+    </div>
+
+    <div class="j-end">
+      <a href="#menu" class="btn-px j-back">▲ Voltar ao menu</a>
+      <p class="j-copy font-mono">© {new Date().getFullYear()} Luca Stephan — feito com Astro.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .j-wrap {
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  @media (min-width: 768px) {
+    .j-wrap { padding: 0 40px; }
+  }
+
+  /* ── Home ── */
+  .j-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 90vh;
+    min-height: 90svh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .j-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+  }
+  .j-hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to top, rgba(13, 10, 31, 0.95), rgba(13, 10, 31, 0.6) 50%, rgba(13, 10, 31, 0.45));
+  }
+  .j-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .j-menu-link {
+    color: var(--color-ficha);
+    text-decoration: none;
+    font-size: 22px;
+    padding: 8px 0;
+  }
+  .j-nav {
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .j-nav a,
+  .j-menu-link {
+    color: var(--color-fosforo);
+    text-decoration: none;
+  }
+  .j-menu-link { color: var(--color-ficha); }
+  .j-nav a:hover { color: var(--color-ciano); }
+  @media (max-width: 640px) {
+    .j-nav { display: none; }
+  }
+  .j-hero-body {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 64px;
+    padding-bottom: 80px;
+  }
+  .j-kicker {
+    margin: 0 0 20px;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ciano);
+  }
+  .j-hero-title {
+    max-width: 880px;
+    margin: 0;
+    font-size: clamp(38px, 7.2vw, 76px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-fosforo);
+    /* Texto pixel sobre cena pixel: contorno escuro de 2px + sombra dura
+       deslocada (título de fliperama). drop-shadow, e não text-shadow,
+       porque text-shadow pinta por cima do texto em gradiente. */
+    filter:
+      drop-shadow(2px 0 0 var(--color-fliperama))
+      drop-shadow(-2px 0 0 var(--color-fliperama))
+      drop-shadow(0 2px 0 var(--color-fliperama))
+      drop-shadow(0 -2px 0 var(--color-fliperama))
+      drop-shadow(4px 4px 0 #3b2d7a);
+  }
+  .j-kicker {
+    filter: drop-shadow(1px 1px 0 var(--color-fliperama));
+  }
+  .j-ciano { color: var(--color-ciano); }
+  .j-actions {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  /* ── Seções ── */
+  .j-section {
+    padding: 96px 0;
+    border-top: 2px solid var(--color-grade);
+  }
+
+  /* 01 Sobre — terminal */
+  .j-sobre {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 1024px) {
+    .j-sobre { grid-template-columns: 240px 1fr; gap: 40px; align-items: start; }
+  }
+  .j-wizard {
+    width: 200px;
+    height: auto;
+    justify-self: center;
+  }
+  @media (min-width: 1024px) {
+    .j-wizard { width: 240px; margin-top: 8px; }
+  }
+  .term {
+    min-width: 0;
+    background: #070513;
+    box-shadow: inset 0 0 0 2px var(--color-grade);
+  }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px;
+    background: var(--color-tela);
+    font-size: 12px;
+    color: var(--color-nevoa);
+  }
+  .term-dots { display: flex; gap: 6px; }
+  .term-dots i { width: 10px; height: 10px; background: var(--color-rosa); }
+  .term-dots i:nth-child(2) { background: var(--color-ficha); }
+  .term-dots i:nth-child(3) { background: var(--color-ciano); }
+  .term-body {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #d9d2f5;
+  }
+  .term-body p { margin: 0; }
+  .term-body .cmd { color: var(--color-fosforo); }
+  .term-body .cmd:not(:first-child) { margin-top: 18px; }
+  .term-body .p { color: var(--color-rosa); }
+  .term-body .k { color: var(--color-ficha); }
+  .term-body .s { color: var(--color-ciano); }
+  .term-body .a { color: var(--color-violeta); }
+  .term-body .dim { color: var(--color-nevoa); }
+  .term-body .ok { color: #7dffb0; }
+  .term-body .badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--color-fliperama);
+    background: var(--color-ficha);
+  }
+  /* "chave  valor" alinhados como saída de terminal; empilha no celular */
+  .kv { margin: 0; display: grid; grid-template-columns: max-content 1fr; column-gap: 32px; }
+  .kv dt { color: #d9d2f5; }
+  .kv dd { margin: 0; }
+  @media (max-width: 720px) {
+    .term-body { padding: 18px 16px; font-size: 13px; }
+    .kv { grid-template-columns: 1fr; }
+    .kv dd { margin-bottom: 8px; padding-left: 12px; }
+  }
+
+  /* Terminal "digitando": linhas aparecem uma a uma ao entrar na tela */
+  .term.is-typing .term-body > * { visibility: hidden; }
+  .term.is-typing .term-body > .shown { visibility: visible; }
+
+  /* 02 Carrossel */
+  .j-carousel-frame {
+    padding: 2px;
+    background: var(--color-grade);
+  }
+  .j-carousel {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-tela);
+    outline: none;
+  }
+  .j-carousel:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--color-ficha);
+  }
+  .j-track {
+    display: flex;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+  }
+  .j-track figure {
+    position: relative;
+    flex: none;
+    width: 100%;
+    margin: 0;
+  }
+  .j-track img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .j-track figcaption {
+    pointer-events: none;
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 64px 24px 24px;
+    background: linear-gradient(to top, rgba(13, 10, 31, 0.9), rgba(13, 10, 31, 0.35) 60%, transparent);
+  }
+  .j-slide-title {
+    display: block;
+    font-size: clamp(22px, 2.9vw, 32px);
+    font-weight: 400;
+    color: var(--color-fosforo);
+  }
+  .j-slide-caption {
+    display: block;
+    margin-top: 4px;
+    max-width: 560px;
+    font-size: 14px;
+    color: #d9d2f5;
+  }
+  .j-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: var(--color-fliperama);
+    color: var(--color-fosforo);
+    box-shadow: inset 0 0 0 2px var(--color-grade);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+  }
+  .j-arrow-prev { left: 12px; }
+  .j-arrow-next { right: 12px; }
+  .j-carousel:hover .j-arrow,
+  .j-arrow:focus-visible {
+    opacity: 1;
+  }
+  .j-arrow:hover {
+    color: var(--color-ciano);
+    box-shadow: inset 0 0 0 2px var(--color-ciano);
+  }
+  /* Telas de toque não têm hover: setas sempre visíveis */
+  @media (hover: none) {
+    .j-arrow { opacity: 1; width: 40px; height: 40px; }
+  }
+  .j-dots {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    gap: 6px;
+  }
+  .j-dots button {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 0;
+    background: rgba(243, 238, 255, 0.4);
+    cursor: pointer;
+  }
+  .j-dots button[aria-current="true"] {
+    width: 26px;
+    background: var(--color-ciano);
+  }
+
+  /* 03 Contato */
+  .j-contato {
+    background: var(--color-tela);
+  }
+  .j-contato-title {
+    margin: 0;
+    max-width: 720px;
+    font-size: clamp(36px, 6.6vw, 66px);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  .j-contato .btn-px:not(.ghost) {
+    word-break: break-all;
+  }
+  .j-end {
+    margin-top: 96px;
+    padding-top: 40px;
+    border-top: 2px solid var(--color-grade);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .j-copy {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--color-nevoa);
+  }
+</style>
+
+<script>
+  // Carrossel "Um pouco mais sobre mim" — leve, sem dependências.
+  // Transição em passos (estética arcade); instantânea com reduced-motion.
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>("[data-track]");
+    const slides = track ? (Array.from(track.children) as HTMLElement[]) : [];
+    const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot]"));
+    const prev = root.querySelector<HTMLElement>("[data-prev]");
+    const next = root.querySelector<HTMLElement>("[data-next]");
+    if (!track || slides.length === 0) return;
+
+    let index = 0;
+    const total = slides.length;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function render() {
+      track!.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((d, i) => d.setAttribute("aria-current", i === index ? "true" : "false"));
+    }
+    const go = (i: number) => {
+      index = (i + total) % total;
+      render();
+    };
+
+    next?.addEventListener("click", () => go(index + 1));
+    prev?.addEventListener("click", () => go(index - 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
+
+    // Teclado (quando o carrossel está em foco)
+    root.tabIndex = 0;
+    root.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") go(index + 1);
+      if (e.key === "ArrowLeft") go(index - 1);
+    });
+
+    // Swipe / arraste
+    let startX = 0;
+    let dragging = false;
+    root.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      startX = e.clientX;
+    });
+    root.addEventListener("pointerup", (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+    });
+
+    track.style.transition = reduce ? "none" : "transform 360ms steps(6, end)";
+    render();
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach(initCarousel);
+
+  // Terminal do "Sobre": as linhas aparecem uma a uma (em passos) na
+  // primeira vez que o terminal entra na tela. Sem isso (reduced-motion
+  // ou sem IntersectionObserver), o texto já aparece inteiro.
+  const term = document.querySelector<HTMLElement>("[data-term]");
+  if (term && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const lines = Array.from(term.querySelectorAll<HTMLElement>(".term-body > *"));
+    term.classList.add("is-typing");
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      lines.forEach((line, i) => setTimeout(() => line.classList.add("shown"), i * 110));
+      setTimeout(() => term.classList.remove("is-typing"), lines.length * 110 + 50);
+    }, { threshold: 0.25 });
+    io.observe(term);
+  }
+</script>

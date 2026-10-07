@@ -1,903 +1,372 @@
 ---
+// Tela inicial (capa arcade). PRESS START abre o menu com as fases.
+// /#menu abre direto no menu (é para onde os botões "◀ Menu" voltam).
 import Layout from "../layouts/Layout.astro";
-import { aboutSlides } from "../data/about";
-import {
-  cases,
-  highlightCases,
-  corporativoCompact,
-  TOOLS,
-} from "../data/cases";
-import { diagrams } from "../data/diagrams";
-import ToolChips from "../components/ToolChips.astro";
+import Logo from "../components/nekobit/Logo.astro";
+import Starfield from "../components/nekobit/Starfield.astro";
+import MenuBar from "../components/nekobit/MenuBar.astro";
+import PixelSprite from "../components/nekobit/PixelSprite.astro";
+import Jogador from "../components/fases/Jogador.astro";
+import Portfolio from "../components/fases/Portfolio.astro";
+import Nekobit from "../components/fases/Nekobit.astro";
+import { SYMBOL, steps } from "../lib/pixel";
 
-// Ferramentas para a barra de filtro (todas que aparecem, mais usadas primeiro).
-const toolCounts = new Map<string, number>();
-for (const c of cases)
-  for (const t of c.tools) toolCounts.set(t, (toolCounts.get(t) || 0) + 1);
-const filterTools = [...toolCounts.entries()]
-  .map(([slug, count]) => ({
-    slug,
-    count,
-    name: TOOLS[slug]?.name,
-    icon: TOOLS[slug]?.icon,
-  }))
-  .filter((t) => t.name)
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 20); // barra enxuta: as 20 ferramentas mais recorrentes
-
-const nav = [
-  { label: "Sobre", href: "#sobre" },
-  { label: "Trabalhos", href: "#trabalhos" },
-  { label: "Contato", href: "#contato" },
+const phases = [
+  {
+    id: "jogador",
+    label: "Jogador",
+    sub: "Luca Stephan — trajetória, sobre e contato",
+    portrait: "/images/nekobit/retrato-jogador.webp",
+  },
+  {
+    id: "portfolio",
+    label: "Portfólio",
+    sub: "Trabalhos em destaque e corporativos",
+    portrait: "/images/nekobit/trofeu-portfolio.webp",
+  },
+  {
+    id: "nekobit",
+    label: "Nekobit",
+    kicker: "Sobre a Nekobit",
+    sub: "O que fazemos e como trabalhamos",
+    icon: { grid: SYMBOL, color: steps(6), w: 7, h: 6 },
+  },
 ];
 ---
 
-<Layout>
-  <!-- ── Hero full-bleed: Pouso Alegre animada (Pixel Lab) ───── -->
-  <section class="relative isolate flex min-h-[90vh] flex-col overflow-hidden">
-    <!-- Fundo: cidade animada + quadro estático p/ reduced-motion -->
-    <img
-      src="/images/pouso-alegre-hero.webp"
-      alt="Pouso Alegre em pixel art — a praça da catedral, animada"
-      width="384"
-      height="216"
-      class="hero-anim absolute inset-0 -z-20 h-full w-full object-cover opacity-70"
-      style="image-rendering: pixelated;"
-    />
-    <img
-      src="/images/pouso-alegre-hero-static.png"
-      alt="Pouso Alegre em pixel art — a praça da catedral"
-      width="384"
-      height="216"
-      class="hero-static absolute inset-0 -z-20 h-full w-full object-cover opacity-70"
-      style="image-rendering: pixelated;"
-    />
-    <!-- Scrim de legibilidade -->
-    <div
-      class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/55 to-ink/40"
-    >
-    </div>
+<Layout
+  title="Nekobit — sistemas de IA e automações sob medida"
+  description="Nekobit: sistemas de IA, automações e produtos de dados sob medida. Portfólio de Luca Stephan."
+  bodyClass="bg-fliperama text-fosforo"
+>
+  <main id="cover" class="cover scanlines" data-state="start">
+    <Starfield />
+    <div class="grid-floor" aria-hidden="true"></div>
 
-    <!-- Top bar sobreposta -->
-    <header
-      class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 md:px-10"
-    >
-      <a
-        href="#"
-        class="font-display text-lg font-semibold tracking-tight text-paper"
-      >
-        Luca Stephan
-      </a>
-      <nav class="flex gap-6 text-sm text-paper/80">
+    <div class="cover-inner">
+      <h1 class="sr-only">Nekobit</h1>
+      <div class="cover-logo">
+        <Logo blink />
+      </div>
+
+      <button id="press-start" type="button" class="press-start font-pixel">
+        <span class="blink-step" aria-hidden="true">▶</span> PRESS START
+      </button>
+
+      <nav id="menu" class="menu" aria-label="Menu principal" hidden>
         {
-          nav.map((item) => (
-            <a href={item.href} class="transition-colors hover:text-paper">
-              {item.label}
-            </a>
+          phases.map((p, i) => (
+            <MenuBar
+              href={`#${p.id}`}
+              kicker={`0${i + 1} · ${p.kicker ?? p.label}`}
+              title={p.label}
+              sub={p.sub}
+              portrait={p.portrait}
+              selected={i === 0}
+            >
+              {p.icon && (
+                <PixelSprite slot="icon" layers={[{ grid: p.icon.grid, color: p.icon.color }]} width={p.icon.w} height={p.icon.h} />
+              )}
+            </MenuBar>
           ))
         }
       </nav>
-    </header>
-
-    <!-- Conteúdo do hero, ancorado embaixo -->
-    <div
-      class="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-6 pb-20 pt-16 md:px-10"
-    >
-      <p class="mb-5 font-sans text-sm uppercase tracking-[0.2em] text-paper/90">
-        AI Engineer · Automações · Pouso Alegre, BR
-      </p>
-      <h1
-        class="max-w-3xl font-display text-5xl font-light leading-[1.05] tracking-tight text-paper md:text-7xl"
-      >
-        Construo <em class="italic text-accent-soft">sistemas de IA</em> e
-        <em class="italic">automações</em> sob medida — do dado não estruturado
-        ao produto final.
-      </h1>
-      <div class="mt-10 flex flex-wrap gap-4">
-        <a
-          href="#trabalhos"
-          class="rounded-full bg-paper px-6 py-3 text-sm text-ink transition-transform hover:-translate-y-0.5"
-        >
-          Ver trabalhos
-        </a>
-        <a
-          href="#contato"
-          class="rounded-full border border-paper/40 px-6 py-3 text-sm text-paper transition-colors hover:bg-paper/10"
-        >
-          Entrar em contato
-        </a>
-      </div>
     </div>
-  </section>
+  </main>
 
-  <!-- ── Sobre ───────────────────────────────────────────────── -->
-  <section id="sobre" class="border-t border-line bg-paper-deep/40 py-20 md:py-28">
-    <div class="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-12 md:px-10">
-      <div class="md:col-span-4">
-        <span class="font-display text-sm text-accent">01 — Sobre</span>
-        <img
-          src="/images/wizard-luca.webp"
-          alt="Luca como um mago pixel art, meditando"
-          width="256"
-          height="256"
-          loading="lazy"
-          class="mt-2 w-80 md:-ml-20 md:-mt-4 md:w-[140%] md:max-w-none"
-          style="image-rendering: pixelated;"
-        />
-      </div>
-      <div class="md:col-span-8">
-        <p class="font-display text-2xl font-light leading-snug md:text-3xl">
-          Venho da administração de empresas — FGV EAESP e HEC Paris —, com
-          formação voltada a empreendedorismo, programação e estatística.
-          Construo sistemas de IA, agentes e automações sob medida:
-          independentemente de como a empresa organiza ou armazena seus dados.
-        </p>
-        <p class="mt-6 max-w-2xl leading-relaxed text-muted">
-          Trabalho como generalista — domino negócio e código, então conduzo um
-          projeto complexo da concepção à entrega ponta a ponta, sozinho ou ao
-          lado de profissionais com a mesma abordagem e ritmo de trabalho. Na
-          prática, isso vira soluções altamente personalizadas, entregues em
-          prazos curtos e sem fricção de repasse. Em paralelo, curso pós em
-          Machine Learning Engineering, consolidando a base técnica desse
-          trabalho.
-        </p>
+  <!-- Fases: trancadas (hidden) até a barra correspondente ser escolhida.
+       Qualquer âncora dentro de uma fase (#contato, #trabalhos…) destrava a fase. -->
+  {
+    phases.map((p) => (
+      <section id={p.id} data-phase={p.id} class="phase" hidden>
+        {p.id === "jogador" && <Jogador />}
+        {p.id === "portfolio" && <Portfolio />}
+        {p.id === "nekobit" && <Nekobit />}
+      </section>
+    ))
+  }
 
-        <div class="mt-10 grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
-          <div>
-            <h3 class="mb-4 text-xs uppercase tracking-[0.2em] text-accent">
-              Formação
-            </h3>
-            <ul class="space-y-4 text-sm">
-              <li>
-                <span class="block font-medium">
-                  Pós · Machine Learning Engineering
-                </span>
-                <span class="text-muted">FIAP · 2025–2027</span>
-              </li>
-              <li>
-                <span class="block font-medium">HEC Paris</span>
-                <span class="text-muted">Intercâmbio · 2023–2024</span>
-              </li>
-              <li>
-                <span class="block font-medium">FGV EAESP</span>
-                <span class="text-muted">
-                  Administração de Empresas · 2020–2025
-                </span>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="mb-4 text-xs uppercase tracking-[0.2em] text-accent">
-              Reconhecimentos
-            </h3>
-            <ul class="space-y-4 text-sm">
-              <li>
-                <span class="block font-medium">
-                  Quadro de Honra · FGV EAESP
-                </span>
-                <span class="text-muted">
-                  Entre os 10 melhores alunos do semestre — 3º lugar (2020.2) e
-                  9º lugar (2021.2)
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Trabalhos ───────────────────────────────────────────── -->
-  <section id="trabalhos" class="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-    <div
-      class="mb-10 flex items-baseline justify-between border-b border-line pb-6"
-    >
-      <h2 class="font-display text-3xl font-light md:text-4xl">
-        Trabalhos selecionados
-      </h2>
-      <span class="font-display text-sm text-accent">02 — Trabalhos</span>
-    </div>
-
-    <!-- Filtro por ferramenta -->
-    <div class="mb-10" data-filterbar>
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="mr-1 text-xs uppercase tracking-[0.18em] text-muted">
-          Filtrar por stack
-        </span>
-        {
-          filterTools.map((t) => (
-            <button
-              type="button"
-              data-filter={t.slug}
-              class="filter-chip inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs text-muted transition hover:border-accent/50"
-            >
-              {t.icon && (
-                <img
-                  src={`/images/icons/${t.icon}.svg`}
-                  alt=""
-                  width="14"
-                  height="14"
-                  class="h-3.5 w-3.5"
-                />
-              )}
-              {t.name}
-            </button>
-          ))
-        }
-        <button
-          type="button"
-          data-filter-clear
-          hidden
-          class="ml-1 rounded-full px-2.5 py-1 text-xs text-accent underline underline-offset-2"
-        >
-          Limpar
-        </button>
-      </div>
-    </div>
-
-    <!-- Destaques — galeria horizontal -->
-    <div data-group data-gallery-root>
-      <div class="mb-6 flex items-center justify-between gap-4">
-        <p class="text-sm uppercase tracking-[0.2em] text-accent">
-          Em destaque
-        </p>
-        <div class="flex items-center gap-2">
-          <span class="mr-1 hidden text-xs text-muted sm:inline">
-            Arraste para o lado
-          </span>
-          <button
-            type="button"
-            data-gallery-prev
-            aria-label="Anterior"
-            class="grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition hover:border-accent/50 hover:text-ink disabled:opacity-30"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-          </button>
-          <button
-            type="button"
-            data-gallery-next
-            aria-label="Próximo"
-            class="grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition hover:border-accent/50 hover:text-ink disabled:opacity-30"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-          </button>
-        </div>
-      </div>
-      <div
-        data-gallery
-        class="gallery -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-4 md:mx-0 md:px-0"
-      >
-        {
-          highlightCases.map((c) => (
-            <article
-              data-card
-              data-tools={c.tools.join(" ")}
-              class="case-card group relative flex w-[min(84vw,400px)] shrink-0 snap-start flex-col overflow-hidden rounded-xl border border-line bg-paper transition hover:border-accent/40 hover:shadow-[0_2px_24px_-8px_rgba(26,26,26,0.18)]"
-            >
-              {/* Preview: screenshot, diagrama ou capa tipográfica */}
-              <div class="relative aspect-[16/10] overflow-hidden border-b border-line bg-paper-deep/50">
-                {c.preview ? (
-                  <img
-                    src={`/images/previews/${c.preview}.webp`}
-                    alt={`Prévia de ${c.title}`}
-                    width="960"
-                    height="600"
-                    loading="lazy"
-                    class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
-                ) : c.diagram && diagrams[c.diagram] ? (
-                  <div class="diagram-preview absolute inset-0 flex items-center justify-center overflow-hidden">
-                    <Fragment set:html={diagrams[c.diagram]} />
-                  </div>
-                ) : (
-                  <div class="absolute inset-0 flex flex-col justify-center gap-3 px-8">
-                    <span class="h-px w-12 bg-accent/50" />
-                    <p class="font-display text-base leading-snug text-ink/75 md:text-lg">
-                      {c.coverTitle ?? c.summary}
-                    </p>
-                    <p class="text-xs leading-relaxed text-muted">
-                      {c.coverMeta ?? c.stack}
-                    </p>
-                  </div>
-                )}
-                {/* Fade para o corpo do card */}
-                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-paper via-paper/70 to-transparent" />
-                {c.badge && (
-                  <span class="absolute left-4 top-4 rounded border border-line bg-paper/90 px-2 py-1 text-[11px] tracking-wide text-muted backdrop-blur">
-                    {c.badge}
-                  </span>
-                )}
-                {c.video && (
-                  <button
-                    type="button"
-                    data-open={c.slug}
-                    aria-label={`Assistir: ${c.title}`}
-                    class="absolute inset-0 z-10 grid place-items-center"
-                  >
-                    <span class="grid h-14 w-14 place-items-center rounded-full bg-ink/70 text-paper shadow-lg backdrop-blur-sm transition group-hover:scale-105 group-hover:bg-accent">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="translate-x-0.5"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z" /></svg>
-                    </span>
-                  </button>
-                )}
-                {c.soon && (
-                  <span class="absolute right-4 top-4 rounded-full bg-accent px-2.5 py-1 text-[11px] tracking-wide text-paper">
-                    Em breve
-                  </span>
-                )}
-              </div>
-
-              {/* Corpo */}
-              <div class="flex flex-1 flex-col p-6 md:p-7">
-                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  {c.date && <span class="text-sm text-muted">{c.date}</span>}
-                  <span class="text-xs uppercase tracking-[0.18em] text-accent">
-                    {c.category}
-                  </span>
-                </div>
-                <h3 class="mt-3 font-display text-2xl font-light leading-snug tracking-tight transition-colors group-hover:text-accent">
-                  {c.link ? (
-                    <a
-                      href={c.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="before:absolute before:inset-0 before:content-['']"
-                    >
-                      {c.title}
-                    </a>
-                  ) : (
-                    c.title
-                  )}
-                </h3>
-                <p class="mt-3 leading-relaxed text-muted">{c.summary}</p>
-                {c.impact && <p class="mt-3 text-sm text-ink/75">↳ {c.impact}</p>}
-                <div class="mt-5">
-                  <ToolChips tools={c.tools} />
-                </div>
-
-                <div class="relative z-10 mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 text-sm">
-                  {c.link && (
-                    <a
-                      href={c.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 font-medium text-accent"
-                    >
-                      {c.linkLabel ?? "Abrir"}
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><path d="M7 17 17 7M9 7h8v8" /></svg>
-                    </a>
-                  )}
-                  {c.repo && (
-                    <a
-                      href={c.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-ink"
-                    >
-                      <img
-                        src="/images/icons/github.svg"
-                        alt=""
-                        width="14"
-                        height="14"
-                        loading="lazy"
-                        class="h-3.5 w-3.5 opacity-60"
-                      />
-                      Código
-                    </a>
-                  )}
-                  {(c.detail || c.diagram || c.video) && (
-                    <button
-                      type="button"
-                      data-open={c.slug}
-                      class={`inline-flex items-center gap-1.5 underline-offset-4 hover:underline ${c.link ? "text-muted hover:text-ink" : "font-medium text-accent"}`}
-                    >
-                      {c.video ? "Assistir" : c.diagram ? "Ver arquitetura" : "Detalhes"}
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-
-    <!-- Corporativo — grade compacta -->
-    <div data-group class="mt-16">
-      <div class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
-        <h3 class="font-display text-xl italic text-accent">Corporativo</h3>
-        <p class="text-sm text-muted">
-          Mais automações, agentes e dados em produção.
-        </p>
-      </div>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          corporativoCompact.map((c) => (
-            <li class="h-full" data-card data-tools={c.tools.join(" ")}>
-              <button
-                type="button"
-                data-open={c.slug}
-                class="group flex h-full w-full flex-col items-start rounded-lg border border-line p-5 text-left transition hover:border-accent/40 hover:bg-paper-deep/40"
-              >
-                <span class="text-[11px] uppercase tracking-wider text-accent">
-                  {c.category}
-                </span>
-                <h4 class="mt-2 font-display text-lg leading-snug transition-colors group-hover:text-accent">
-                  {c.title}
-                </h4>
-                <p class="mt-2 text-sm leading-relaxed text-muted">
-                  {c.summary}
-                </p>
-                <div class="mt-4">
-                  <ToolChips tools={c.tools} />
-                </div>
-              </button>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <p data-empty hidden class="mt-10 text-sm text-muted">
-      Nenhum trabalho com esse filtro.{" "}
-      <button
-        type="button"
-        data-filter-clear
-        class="text-accent underline underline-offset-2"
-      >
-        Limpar filtros
-      </button>
-    </p>
-  </section>
-
-  <!-- ── Um pouco mais sobre mim (carrossel) ─────────────────── -->
-  <section id="mais-sobre" class="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-    <div class="mb-8 flex items-baseline justify-between border-b border-line pb-6">
-      <h2 class="font-display text-3xl md:text-4xl">Um pouco mais sobre mim</h2>
-      <span class="font-display text-sm text-accent">Fora do código</span>
-    </div>
-
-    <div
-      class="carousel group relative overflow-hidden rounded-lg border border-line bg-paper-deep"
-      data-carousel
-      aria-roledescription="carrossel"
-      aria-label="Um pouco mais sobre mim"
-    >
-      <!-- Trilho -->
-      <div class="carousel-track flex aspect-[16/9] w-full" data-track>
-        {
-          aboutSlides.map((s, i) => (
-            <figure
-              class="relative w-full shrink-0"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${i + 1} de ${aboutSlides.length}`}
-            >
-              <img
-                src={s.img}
-                alt={s.title}
-                width="1280"
-                height="720"
-                loading={i === 0 ? "eager" : "lazy"}
-                class="h-full w-full object-cover"
-                style="image-rendering: pixelated;"
-              />
-              <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent p-6 pt-16 md:p-8 md:pt-20">
-                <span class="block font-display text-xl text-paper md:text-2xl">
-                  {s.title}
-                </span>
-                {s.caption && (
-                  <span class="mt-1 block max-w-xl text-sm text-paper/80">
-                    {s.caption}
-                  </span>
-                )}
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-
-      <!-- Setas -->
-      <button
-        type="button"
-        data-prev
-        aria-label="Anterior"
-        class="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-paper/80 text-ink opacity-0 backdrop-blur transition hover:bg-paper focus-visible:opacity-100 group-hover:opacity-100"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-      </button>
-      <button
-        type="button"
-        data-next
-        aria-label="Próximo"
-        class="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-paper/80 text-ink opacity-0 backdrop-blur transition hover:bg-paper focus-visible:opacity-100 group-hover:opacity-100"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-      </button>
-
-      <!-- Indicadores -->
-      <div class="absolute bottom-4 right-4 flex gap-2" data-dots>
-        {
-          aboutSlides.map((_, i) => (
-            <button
-              type="button"
-              data-dot={i}
-              aria-label={`Ir para o slide ${i + 1}`}
-              class="h-2 w-2 rounded-full bg-paper/50 transition-all hover:bg-paper"
-            />
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- Fontes ocultas do modal (uma por case) -->
-  <div id="case-sources" hidden>
-    {
-      cases.map((c) => (
-        <article data-modal={c.slug}>
-          {c.video && (
-            <video
-              controls
-              playsinline
-              preload="none"
-              poster={`/images/previews/${c.video}-poster.webp`}
-              class="mb-7 aspect-video w-full rounded-lg bg-ink"
-            >
-              <source src={`/videos/${c.video}.mp4`} type="video/mp4" />
-            </video>
-          )}
-          <p class="text-xs uppercase tracking-[0.18em] text-accent">
-            {c.category}
-          </p>
-          <h3 class="mt-2 font-display text-2xl font-light leading-snug tracking-tight md:text-3xl">
-            {c.title}
-          </h3>
-          <p class="mt-4 leading-relaxed text-muted">{c.detail ?? c.summary}</p>
-          {c.impact && (
-            <p class="mt-5 rounded-lg bg-paper-deep p-4 text-sm leading-relaxed">
-              <span class="font-medium text-ink">Impacto.</span> {c.impact}
-            </p>
-          )}
-          {c.diagram && diagrams[c.diagram] && (
-            <div class="mt-7">
-              <p class="mb-3 text-xs uppercase tracking-[0.2em] text-accent">
-                Arquitetura
-              </p>
-              <div class="overflow-x-auto rounded-lg border border-line bg-paper p-4">
-                <Fragment set:html={diagrams[c.diagram]} />
-              </div>
-            </div>
-          )}
-          {c.stack && (
-            <p class="mt-6 text-xs leading-relaxed text-muted">
-              <span class="uppercase tracking-[0.2em] text-accent">Stack</span>{" "}
-              · {c.stack}
-            </p>
-          )}
-          <div class="mt-4">
-            <ToolChips tools={c.tools} />
-          </div>
-          {(c.link || c.repo) && (
-            <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-5 text-sm">
-              {c.link && (
-                <a
-                  href={c.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 font-medium text-accent"
-                >
-                  {c.linkLabel ?? "Abrir"}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
-                </a>
-              )}
-              {c.repo && (
-                <a
-                  href={c.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-ink"
-                >
-                  <img
-                    src="/images/icons/github.svg"
-                    alt=""
-                    width="14"
-                    height="14"
-                    loading="lazy"
-                    class="h-3.5 w-3.5 opacity-60"
-                  />
-                  Código
-                </a>
-              )}
-            </div>
-          )}
-        </article>
-      ))
-    }
-  </div>
-
-  <!-- Marcador de seta compartilhado p/ os diagramas -->
-  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
-    <defs>
-      <marker
-        id="dgArrow"
-        viewBox="0 0 10 10"
-        refX="9"
-        refY="5"
-        markerWidth="6"
-        markerHeight="6"
-        orient="auto-start-reverse"
-      >
-        <path d="M0,0 L10,5 L0,10 z" fill="#9a8f80"></path>
-      </marker>
-    </defs>
-  </svg>
-
-  <!-- Modal de case -->
-  <div
-    id="case-modal"
-    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
-    aria-hidden="true"
-  >
-    <div data-backdrop class="absolute inset-0 bg-ink/60 backdrop-blur-sm"></div>
-    <div
-      role="dialog"
-      aria-modal="true"
-      class="relative max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-line bg-paper p-6 shadow-2xl md:p-10"
-    >
-      <button
-        type="button"
-        data-close
-        aria-label="Fechar"
-        class="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full text-muted transition hover:bg-paper-deep hover:text-ink"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
-      </button>
-      <div id="case-modal-body"></div>
+  <!-- Transição ao entrar numa fase: tela "carregando fase" (~0,6 s, em passos) -->
+  <div id="fx" class="fx" aria-hidden="true" hidden>
+    <div class="fx-load">
+      <p class="fx-load-k font-mono">Carregando fase</p>
+      <p class="fx-load-name font-pixel" data-fx-name></p>
+      <div class="fx-load-bar notch"><span></span></div>
     </div>
   </div>
-
-  <!-- ── Contato ─────────────────────────────────────────────── -->
-  <section id="contato" class="border-t border-line bg-ink py-20 text-paper md:py-28">
-    <div class="mx-auto max-w-6xl px-6 md:px-10">
-      <span class="font-display text-sm text-paper/60">03 — Contato</span>
-      <h2
-        class="mt-4 max-w-2xl font-display text-4xl font-light leading-tight md:text-6xl"
-      >
-        Vamos construir algo juntos?
-      </h2>
-      <div class="mt-10 flex flex-wrap gap-6 text-lg">
-        <a
-          href="mailto:lucastephan8@gmail.com"
-          class="underline decoration-paper/30 underline-offset-8 transition-colors hover:decoration-paper"
-        >
-          lucastephan8@gmail.com
-        </a>
-        <a
-          href="https://github.com/lucastephan15"
-          class="underline decoration-paper/30 underline-offset-8 transition-colors hover:decoration-paper"
-        >
-          GitHub
-        </a>
-      </div>
-      <p class="mt-16 text-sm text-paper/50">
-        © {new Date().getFullYear()} Luca Stephan — feito com Astro.
-      </p>
-    </div>
-  </section>
 </Layout>
 
-<script>
-  // Carrossel "Um pouco mais sobre mim" — leve, sem dependências.
-  function initCarousel(root: HTMLElement) {
-    const track = root.querySelector<HTMLElement>("[data-track]");
-    const slides = track ? Array.from(track.children) as HTMLElement[] : [];
-    const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot]"));
-    const prev = root.querySelector<HTMLElement>("[data-prev]");
-    const next = root.querySelector<HTMLElement>("[data-next]");
-    if (!track || slides.length === 0) return;
-
-    let index = 0;
-    const total = slides.length;
-    const interval = Number(root.dataset.interval) || 0;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let timer: number | undefined;
-
-    function render() {
-      track!.style.transform = `translateX(-${index * 100}%)`;
-      dots.forEach((d, i) => {
-        const on = i === index;
-        d.style.width = on ? "1.5rem" : "0.5rem";
-        d.classList.toggle("bg-paper", on);
-        d.classList.toggle("bg-paper/50", !on);
-        d.setAttribute("aria-current", on ? "true" : "false");
-      });
-    }
-    function go(i: number) {
-      index = (i + total) % total;
-      render();
-    }
-    function play() {
-      if (!interval || reduce) return;
-      stop();
-      timer = window.setInterval(() => go(index + 1), interval);
-    }
-    function stop() {
-      if (timer) window.clearInterval(timer);
-    }
-
-    next?.addEventListener("click", () => { go(index + 1); play(); });
-    prev?.addEventListener("click", () => { go(index - 1); play(); });
-    dots.forEach((d, i) => d.addEventListener("click", () => { go(i); play(); }));
-
-    root.addEventListener("mouseenter", stop);
-    root.addEventListener("mouseleave", play);
-    root.addEventListener("focusin", stop);
-    root.addEventListener("focusout", play);
-
-    // Teclado (quando o carrossel está em foco)
-    root.tabIndex = 0;
-    root.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") { go(index + 1); play(); }
-      if (e.key === "ArrowLeft") { go(index - 1); play(); }
-    });
-
-    // Swipe / arraste
-    let startX = 0, dragging = false;
-    root.addEventListener("pointerdown", (e) => { dragging = true; startX = e.clientX; stop(); });
-    root.addEventListener("pointerup", (e) => {
-      if (!dragging) return;
-      dragging = false;
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
-      play();
-    });
-
-    // Transição suave (respeitando reduced-motion)
-    track.style.transition = reduce ? "none" : "transform 500ms cubic-bezier(0.22,1,0.36,1)";
-    render();
-    play();
+<style>
+  .cover {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .cover-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 0 16px;
+  }
+  /* Logo em múltiplos inteiros de pixel: 41 bits × --u */
+  .cover-logo {
+    --u: 7px;
+    filter: drop-shadow(0 0 18px rgba(255, 95, 162, 0.45)) drop-shadow(0 0 40px rgba(56, 214, 255, 0.25));
+  }
+  @media (min-width: 480px) { .cover-logo { --u: 10px; } }
+  @media (min-width: 1024px) { .cover-logo { --u: 13px; } }
+  @media (min-width: 1280px) { .cover-logo { --u: 16px; } }
+  /* Onde houver round(): maior pixel inteiro que cabe na tela (41 bits + margens) */
+  @supports (width: round(down, 10px, 1px)) {
+    .cover-logo { --u: round(down, min(16px, (100vw - 40px) / 41), 1px); }
   }
 
-  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach(initCarousel);
-</script>
+  .press-start {
+    background: none;
+    border: 0;
+    color: var(--color-ficha);
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    padding: 14px 20px; /* alvo de toque confortável */
+    cursor: pointer;
+  }
+  .press-start:focus-visible {
+    outline: 2px solid var(--color-ficha);
+    outline-offset: 4px;
+  }
+  @media (min-width: 1024px) {
+    .press-start { font-size: 22px; }
+  }
+
+  /* Ao apertar: pisca rápido 3 vezes antes de abrir o menu */
+  .cover[data-state="starting"] .press-start {
+    animation: press 0.6s steps(1) 1;
+  }
+  @keyframes press {
+    0%, 34%, 68% { opacity: 1; }
+    17%, 51%, 85% { opacity: 0; }
+  }
+  .cover[data-state="menu"] .press-start {
+    display: none;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: min(600px, 100%);
+    --u: 6px; /* ícones 7×7 → 42px dentro do quadro de 72px */
+  }
+  .cover-inner:has(.menu:not([hidden])) {
+    gap: 40px;
+  }
+
+  /* Fase destravada (conteúdo provisório até as fases 3–5) */
+  .phase {
+    border-top: 2px solid var(--color-grade);
+  }
+  /* ── Transição de entrada nas fases ── */
+  .fx {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: all;
+  }
+  .fx[hidden] { display: none; }
+  /* Tela "carregando fase" */
+  .fx { display: grid; place-items: center; background: var(--color-fliperama); }
+  .fx-load { display: grid; justify-items: center; gap: 10px; text-align: center; }
+  .fx.out { animation: fx-blink-out 0.12s steps(2) forwards; }
+  @keyframes fx-blink-out { 50% { opacity: 0.4; } to { opacity: 0; } }
+  .fx-load-k { margin: 0; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ficha); }
+  .fx-load-name { margin: 0; font-size: clamp(36px, 7vw, 64px); line-height: 1; }
+  .fx-load-bar { width: min(320px, 70vw); height: 18px; padding: 3px; margin-top: 10px; background: var(--color-grade); }
+  .fx-load-bar span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #ff5fa2 0 16.6%, #d15dda 16.6% 33.3%, #a162ff 33.3% 50%, #6d76ff 50% 66.6%, #4da0ff 66.6% 83.3%, #38d6ff 83.3%);
+  }
+  .fx .fx-load-bar span { animation: fx-fill 0.42s steps(6) both; }
+  @keyframes fx-fill { from { width: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cover[data-state="starting"] .press-start {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
-  // Modal de cases — clona a fonte oculta correspondente ao slug.
-  const modal = document.getElementById("case-modal");
-  const body = document.getElementById("case-modal-body");
-  const sources = document.getElementById("case-sources");
+  const cover = document.getElementById("cover")!;
+  const button = document.getElementById("press-start") as HTMLButtonElement;
+  const menu = document.getElementById("menu")!;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (modal && body && sources) {
-    let lastFocus: HTMLElement | null = null;
+  const phases = [...document.querySelectorAll<HTMLElement>("[data-phase]")];
+  const bars = [...menu.querySelectorAll<HTMLAnchorElement>(".mbar")];
 
-    const open = (slug: string, trigger: HTMLElement) => {
-      const src = sources.querySelector(`[data-modal="${slug}"]`);
-      if (!src) return;
-      lastFocus = trigger;
-      body.innerHTML = src.innerHTML;
-      body.scrollTop = 0;
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      (modal.querySelector("[data-close]") as HTMLElement | null)?.focus();
-      // Vídeo só começa sozinho se a pessoa não pediu menos movimento.
-      const video = body.querySelector("video");
-      if (video && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        video.play().catch(() => {});
-      }
-    };
+  // ── Seleção do menu: um único estado ──
+  // Mouse, toque, Tab e setas passam todos por select(), que liga .is-selected
+  // em uma barra e desliga nas outras. Nunca há duas selecionadas.
+  let selected = Math.max(0, bars.findIndex((b) => b.classList.contains("is-selected")));
 
-    const close = () => {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      body.innerHTML = "";
-      lastFocus?.focus();
-    };
-
-    document.querySelectorAll<HTMLElement>("[data-open]").forEach((el) => {
-      el.addEventListener("click", () =>
-        open(el.getAttribute("data-open") || "", el),
-      );
+  function select(i: number, focus = false) {
+    selected = (i + bars.length) % bars.length;
+    bars.forEach((b, j) => {
+      const on = j === selected;
+      // Religar a classe reinicia a animação da barra de vida
+      if (on && !b.classList.contains("is-selected")) b.classList.add("is-selected");
+      if (!on) b.classList.remove("is-selected");
     });
-    modal.querySelector("[data-backdrop]")?.addEventListener("click", close);
-    modal.querySelector("[data-close]")?.addEventListener("click", close);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !modal.classList.contains("hidden")) close();
-    });
+    if (focus) bars[selected].focus({ preventScroll: true });
   }
-</script>
 
-<script>
-  // Galeria horizontal dos destaques: setas rolam de um card por vez e
-  // se desabilitam nas pontas.
-  const root = document.querySelector<HTMLElement>("[data-gallery-root]");
-  const rail = root?.querySelector<HTMLElement>("[data-gallery]");
-  const prev = root?.querySelector<HTMLButtonElement>("[data-gallery-prev]");
-  const next = root?.querySelector<HTMLButtonElement>("[data-gallery-next]");
+  bars.forEach((bar, i) => {
+    bar.addEventListener("mouseenter", () => select(i, true));
+    bar.addEventListener("focus", () => select(i));
+  });
 
-  if (rail && prev && next) {
-    const step = () => {
-      const card = rail.querySelector<HTMLElement>("[data-card]:not(.hidden)");
-      const gap = parseFloat(getComputedStyle(rail).columnGap || "24") || 24;
-      return card ? card.offsetWidth + gap : rail.clientWidth * 0.8;
-    };
+  // Setas só quando o menu está visível na tela e o foco não está dentro de uma fase
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+    if (menu.hidden || menu.getBoundingClientRect().bottom < 0) return;
+    if ((document.activeElement as Element | null)?.closest("[data-phase]")) return;
+    e.preventDefault();
+    select(selected + (e.key === "ArrowDown" ? 1 : -1), true);
+  });
 
-    const sync = () => {
-      const max = rail.scrollWidth - rail.clientWidth - 2;
-      prev.disabled = rail.scrollLeft <= 2;
-      next.disabled = rail.scrollLeft >= max;
-    };
+  // O hash é a fonte da verdade:
+  //   ""          → capa (PRESS START)
+  //   #menu       → menu, tudo trancado
+  //   #<id>       → menu + destrava a fase que contém o elemento #<id> e rola até ele
+  // Assim links diretos (/#jogador, /#contato) e o "voltar" do navegador funcionam.
 
-    prev.addEventListener("click", () =>
-      rail.scrollBy({ left: -step(), behavior: "smooth" }),
-    );
-    next.addEventListener("click", () =>
-      rail.scrollBy({ left: step(), behavior: "smooth" }),
-    );
-    rail.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", sync);
-    sync();
-
-    // Filtrar muda a largura do trilho: reavalia as setas no próximo frame.
-    document
-      .querySelectorAll<HTMLElement>("[data-filter], [data-filter-clear]")
-      .forEach((el) =>
-        el.addEventListener("click", () => requestAnimationFrame(sync)),
-      );
+  function showMenu() {
+    cover.dataset.state = "menu";
+    menu.hidden = false;
   }
-</script>
 
-<script>
-  // Filtro de trabalhos por ferramenta (stack). Multi-seleção, semântica OU.
-  const section = document.getElementById("trabalhos");
-  if (section) {
-    const chips = Array.from(section.querySelectorAll<HTMLElement>("[data-filter]"));
-    const cards = Array.from(section.querySelectorAll<HTMLElement>("[data-card]"));
-    const groups = Array.from(section.querySelectorAll<HTMLElement>("[data-group]"));
-    const clears = Array.from(section.querySelectorAll<HTMLElement>("[data-filter-clear]"));
-    const empty = section.querySelector<HTMLElement>("[data-empty]");
-    const active = new Set<string>();
-
-    const apply = () => {
-      let anyVisible = false;
-      cards.forEach((card) => {
-        const tools = (card.getAttribute("data-tools") || "").split(" ");
-        const show =
-          active.size === 0 || [...active].some((a) => tools.includes(a));
-        card.classList.toggle("hidden", !show);
-        if (show) anyVisible = true;
-      });
-      groups.forEach((g) => {
-        const hasVisible = !!g.querySelector("[data-card]:not(.hidden)");
-        g.classList.toggle("hidden", !hasVisible);
-      });
-      chips.forEach((ch) =>
-        ch.classList.toggle(
-          "is-active",
-          active.has(ch.getAttribute("data-filter") || ""),
-        ),
-      );
-      clears.forEach((c) => ((c as HTMLButtonElement).hidden = active.size === 0));
-      if (empty) empty.hidden = anyVisible;
-    };
-
-    chips.forEach((ch) =>
-      ch.addEventListener("click", () => {
-        const slug = ch.getAttribute("data-filter") || "";
-        if (active.has(slug)) active.delete(slug);
-        else active.add(slug);
-        apply();
-      }),
-    );
-    clears.forEach((c) =>
-      c.addEventListener("click", () => {
-        active.clear();
-        apply();
-      }),
-    );
+  function lockAll() {
+    phases.forEach((p) => (p.hidden = true));
   }
+
+  // Cada navegação incrementa o contador; um trancamento pendente (esperando a
+  // rolagem terminar) só vale se nenhuma navegação nova aconteceu nesse meio-tempo.
+  let navToken = 0;
+
+  // Sobe até o topo (suave, se permitido) e só então tranca, para não "pular".
+  function scrollTopThenLock() {
+    const my = navToken;
+    if (window.scrollY === 0 || reduced) {
+      // "instant" explícito: o html tem scroll-behavior: smooth no CSS
+      window.scrollTo({ top: 0, behavior: "instant" });
+      lockAll();
+      return;
+    }
+    let done = false;
+    const finish = () => {
+      if (done || my !== navToken) return;
+      done = true;
+      lockAll();
+    };
+    window.addEventListener("scrollend", finish, { once: true });
+    setTimeout(finish, 900); // navegadores sem scrollend
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ── Transição ao entrar numa fase ──
+  // Só quando a pessoa entra numa fase que estava trancada (não em link direto
+  // nem com reduced-motion). O conteúdo troca "por trás" do efeito, no meio dele.
+  const fx = document.getElementById("fx")!;
+  const fxName = fx.querySelector<HTMLElement>("[data-fx-name]")!;
+  const NAMES: Record<string, string> = { jogador: "Jogador", portfolio: "Portfólio", nekobit: "Nekobit" };
+
+  function playFx(phaseId: string, mid: () => void) {
+    fx.classList.remove("out");
+    fxName.textContent = NAMES[phaseId] ?? phaseId;
+    // Reinicia a animação da barra a cada entrada
+    const bar = fx.querySelector<HTMLElement>(".fx-load-bar span");
+    if (bar) {
+      bar.style.animation = "none";
+      void bar.offsetWidth;
+      bar.style.animation = "";
+    }
+    fx.hidden = false;
+    setTimeout(() => {
+      mid();
+      fx.classList.add("out");
+    }, 480);
+    setTimeout(() => (fx.hidden = true), 620);
+  }
+
+  function route(instant = false) {
+    navToken++;
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) {
+      cover.dataset.state = "start";
+      menu.hidden = true;
+      lockAll();
+      return;
+    }
+    showMenu();
+    if (id === "menu") {
+      scrollTopThenLock();
+      return;
+    }
+    const target = document.getElementById(id);
+    const phase = target?.closest<HTMLElement>("[data-phase]");
+    if (!target || !phase) return;
+    const entering = phase.hidden;
+    const reveal = (behavior: ScrollBehavior) => {
+      phases.forEach((p) => (p.hidden = p !== phase));
+      // Ao voltar ao menu, a barra da última fase aberta continua selecionada
+      const bar = bars.findIndex((b) => b.getAttribute("href") === `#${phase.id}`);
+      if (bar >= 0) select(bar);
+      target.scrollIntoView({ behavior });
+    };
+    if (entering && !instant && !reduced) {
+      playFx(phase.id, () => reveal("instant"));
+    } else {
+      reveal(instant || reduced ? "instant" : "smooth");
+    }
+  }
+
+  function start() {
+    if (cover.dataset.state !== "start") return;
+    const go = () => {
+      location.hash = "menu";
+      select(selected, true);
+    };
+    if (reduced) return go();
+    cover.dataset.state = "starting";
+    setTimeout(go, 600);
+  }
+
+  button.addEventListener("click", start);
+  // Enter/Espaço em qualquer lugar da capa também dão start
+  document.addEventListener("keydown", (e) => {
+    if (cover.dataset.state === "start" && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      start();
+    }
+  });
+
+  window.addEventListener("hashchange", () => route());
+  // Clicar num link para o hash atual não dispara hashchange: roteia mesmo assim.
+  document.addEventListener("click", (e) => {
+    const a = (e.target as Element).closest?.("a[href^='#']");
+    if (a && a.getAttribute("href") === location.hash) {
+      e.preventDefault();
+      route();
+    }
+  });
+  route(true);
 </script>

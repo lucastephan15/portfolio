@@ -1,5 +1,8 @@
 ---
+// Chips de ferramenta (stack) no estilo HUD da Nekobit.
 import { TOOLS } from "../data/cases";
+import { isDarkIcon } from "../lib/iconTone";
+
 interface Props {
   tools?: string[];
 }
@@ -9,9 +12,9 @@ const items = tools.map((t) => TOOLS[t]).filter(Boolean);
 
 {
   items.length > 0 && (
-    <div class="flex flex-wrap gap-1.5">
+    <div class="chips">
       {items.map((meta) => (
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs text-muted">
+        <span class="chip font-mono">
           {meta.icon && (
             <img
               src={`/images/icons/${meta.icon}.svg`}
@@ -19,7 +22,7 @@ const items = tools.map((t) => TOOLS[t]).filter(Boolean);
               width="14"
               height="14"
               loading="lazy"
-              class="h-3.5 w-3.5"
+              class:list={{ "icon-light": isDarkIcon(meta.icon) }}
             />
           )}
           {meta.name}
@@ -28,3 +31,30 @@ const items = tools.map((t) => TOOLS[t]).filter(Boolean);
     </div>
   )
 }
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: #d9d2f5;
+    background: var(--color-fliperama);
+    box-shadow: inset 0 0 0 2px var(--color-grade);
+  }
+  .chip img {
+    width: 14px;
+    height: 14px;
+  }
+  /* Ícone preto/escuro vira branco no fundo escuro */
+  .icon-light {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+</style>

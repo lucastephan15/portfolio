@@ -1,0 +1,31 @@
+---
+// Renderiza camadas de pixel art como um único SVG nítido.
+// O tamanho vem de --u (px por bit) no CSS: largura = colunas × --u.
+import { layerRects, type Layer } from "../../lib/pixel";
+
+interface Props {
+  layers: Layer[];
+  width: number; // em bits
+  height: number; // em bits
+  blink?: boolean; // olhos fecham 1 quadro a cada ~4s
+  label?: string; // texto acessível; sem ele o SVG é decorativo
+  class?: string;
+}
+
+const { layers, width, height, blink = false, label, class: cls = "" } = Astro.props;
+const parts = layers.map(layerRects);
+const fill = parts.map((p) => p.fill).join("");
+const lids = parts.map((p) => p.lids).join("");
+---
+
+<svg
+  class:list={["px-sprite", { "px-blink": blink }, cls]}
+  viewBox={`0 0 ${width} ${height}`}
+  style={`--w:${width};--h:${height}`}
+  role={label ? "img" : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+>
+  <Fragment set:html={fill} />
+  {blink && lids && <g class="px-lid"><Fragment set:html={lids} /></g>}
+</svg>

@@ -1,0 +1,33 @@
+---
+// Logo Nekobit (gato-bit + wordmark em pixel). Tamanho via --u no CSS.
+import PixelSprite from "./PixelSprite.astro";
+import { SYMBOL, WORDMARK, LOGO_W, LOGO_H, steps, PALETTE } from "../../lib/pixel";
+
+interface Props {
+  variant?: "horizontal" | "symbol";
+  wordColor?: string;
+  blink?: boolean;
+  class?: string;
+}
+
+const { variant = "horizontal", wordColor = PALETTE.fosforo, blink = false, class: cls } = Astro.props;
+const sym = { grid: SYMBOL, color: steps(6) };
+---
+
+{
+  variant === "symbol" ? (
+    <PixelSprite layers={[sym]} width={7} height={6} blink={blink} label="Nekobit" class={cls} />
+  ) : (
+    <PixelSprite
+      layers={[
+        { ...sym, y: 1 },
+        { grid: WORDMARK, x: 10, color: wordColor },
+      ]}
+      width={LOGO_W}
+      height={LOGO_H}
+      blink={blink}
+      label="Nekobit"
+      class={cls}
+    />
+  )
+}

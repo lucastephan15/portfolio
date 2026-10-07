@@ -14,9 +14,17 @@ Generalista de formação dupla (negócio + engenharia) que leva problemas corpo
 
 ---
 
+## Site Nekobit (revisão de 07/10/2026)
+
+O site virou o **site da Nekobit** em estética arcade: capa → menu → três fases (Jogador = currículo do Luca · **Portfólio** = estes cases · Nekobit = página da empresa). Os cases vivem na fase **Portfólio**, com a mesma galeria de destaques e a mesma grade Corporativo descritas abaixo.
+
+> **Os cases Corporativo NÃO são trabalhos da Nekobit** — são experiência anterior do Luca. No site, a grade leva o selo "Experiência anterior" ("de experiências anteriores à Nekobit — clientes e nomes omitidos por NDA"), o modal repete o selo e a página da Nekobit cita esses cases só como "exp. anterior". **Os números de impacto deles nunca aparecem como resultado da Nekobit** (o Placar da página da empresa usa só fatos da Nekobit/portfólio).
+
+Os 7 serviços da Nekobit (em `src/data/servicos.ts`) apontam para cases daqui como exemplos.
+
 ## Curadoria do site (revisão de 08/09/2026)
 
-O site é um **currículo**, não a página de uma empresa — a seção de serviço "AI-Ready" foi removida.
+> Contexto histórico: até 07/10/2026 o site era só um **currículo** — a seção de serviço "AI-Ready" tinha sido removida em 08/09/2026. A curadoria de destaques abaixo continua valendo dentro da fase Portfólio.
 
 **Destaques** viraram um grid único no formato "publicação" (referência: seção *Our Publications* do jina.ai): preview no topo, data, título. São dois tipos de card, com a mesma casca:
 

@@ -44,6 +44,7 @@ Seções, em ordem: **Hero → Sobre → Trabalhos → "Um pouco mais sobre mim"
 - **Ícones/objetos de passo:** ~128×128, WebP, **fundo transparente**, em `public/images/ai-ready/`.
 - **Ícones de marca (filtro):** SVG em `public/images/icons/` (de simple-icons, via `cdn.jsdelivr.net/npm/simple-icons@latest/icons/<slug>.svg`).
 - **Previews dos destaques:** screenshot da página em **960×600** (16:10), WebP, em `public/images/previews/`. Sem `image-rendering: pixelated` — não é pixel art.
+- **Vídeos de case:** MP4 **H.264** (não HEVC — não toca em todo navegador), `+faststart`, em `public/videos/<slug>.mp4`; campo `video` no `cases.ts`. Tocam no modal com `preload="none"`; pôster 16:9 em `previews/<slug>-poster.webp`.
 - Sempre `style="image-rendering: pixelated;"` para manter o pixel nítido.
 - O Luca gera as artes (PixelLab). Para manter consistência entre objetos de um conjunto, encadeia geração usando o objeto anterior como referência.
 

@@ -25,6 +25,7 @@ export type Case = {
   soon?: boolean; // em construção — sem link ainda
   coverTitle?: string; // capa tipográfica (quando não há screenshot nem diagrama)
   coverMeta?: string; // linha de autoria/veículo sob a capa
+  video?: string; // arquivo em /videos/<video>.mp4 — toca no modal; pôster em /images/previews/<video>-poster.webp
 };
 
 /* Ferramentas → rótulo + ícone (arquivo em /images/icons/<icon>.svg).
@@ -76,6 +77,8 @@ export const TOOLS: Record<string, { name: string; icon?: string }> = {
   capcut: { name: "CapCut" },
   midjourney: { name: "Midjourney" },
   drone: { name: "Drone 4K" },
+  seedance: { name: "Seedance" },
+  seedream: { name: "Seedream" },
 };
 
 export const cases: Case[] = [
@@ -115,6 +118,23 @@ export const cases: Case[] = [
     preview: "sora-cardapio",
     link: "https://soracardapio.online/",
     linkLabel: "soracardapio.online",
+    year: "2026",
+  },
+  {
+    slug: "luta-pa",
+    title: "Manduzito vs eMilho Pastelzão — animação de luta",
+    category: "Animação / vídeo com IA",
+    date: "Out 2026",
+    summary:
+      "Luta de 15 segundos no traço dos desenhos dos anos 1930, com personagens e cenário de Pouso Alegre.",
+    detail:
+      "Um dragão-mandu contra um pastel, em frente à Catedral de Pouso Alegre, no traço dos desenhos dos anos 1930 (o mesmo de Cuphead). Os 15 segundos saíram numa tomada só no Seedance 2.0, com cada personagem preso a imagens de referência — frente, perfil e um quadro para cada golpe — para não mudar de cara no meio da luta. O cenário foi gerado à parte, a partir de uma foto real da Catedral: a primeira versão, em aquarela e em perspectiva diagonal, não combinava com o traço dos personagens. O HUD de jogo de luta (barras de vida, “ROUND 1”, golpes e “K.O.”) é desenhado por um script em Python e exportado com transparência; na montagem, o vídeo cai para 12 fps e ganha granulação e vinheta, como animação de época.",
+    stack: "Seedance 2.0 (Higgsfield) · Seedream · Python (HUD) · CapCut",
+    tools: ["seedance", "seedream", "python", "capcut"],
+    group: "pessoal",
+    highlight: true,
+    preview: "luta-pa",
+    video: "luta-pa",
     year: "2026",
   },
   {

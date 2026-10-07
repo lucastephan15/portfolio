@@ -307,6 +307,18 @@ const nav = [
                     {c.badge}
                   </span>
                 )}
+                {c.video && (
+                  <button
+                    type="button"
+                    data-open={c.slug}
+                    aria-label={`Assistir: ${c.title}`}
+                    class="absolute inset-0 z-10 grid place-items-center"
+                  >
+                    <span class="grid h-14 w-14 place-items-center rounded-full bg-ink/70 text-paper shadow-lg backdrop-blur-sm transition group-hover:scale-105 group-hover:bg-accent">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="translate-x-0.5"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z" /></svg>
+                    </span>
+                  </button>
+                )}
                 {c.soon && (
                   <span class="absolute right-4 top-4 rounded-full bg-accent px-2.5 py-1 text-[11px] tracking-wide text-paper">
                     Em breve
@@ -372,13 +384,13 @@ const nav = [
                       Código
                     </a>
                   )}
-                  {(c.detail || c.diagram) && (
+                  {(c.detail || c.diagram || c.video) && (
                     <button
                       type="button"
                       data-open={c.slug}
                       class={`inline-flex items-center gap-1.5 underline-offset-4 hover:underline ${c.link ? "text-muted hover:text-ink" : "font-medium text-accent"}`}
                     >
-                      {c.diagram ? "Ver arquitetura" : "Detalhes"}
+                      {c.video ? "Assistir" : c.diagram ? "Ver arquitetura" : "Detalhes"}
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </button>
                   )}
@@ -524,6 +536,17 @@ const nav = [
     {
       cases.map((c) => (
         <article data-modal={c.slug}>
+          {c.video && (
+            <video
+              controls
+              playsinline
+              preload="none"
+              poster={`/images/previews/${c.video}-poster.webp`}
+              class="mb-7 aspect-video w-full rounded-lg bg-ink"
+            >
+              <source src={`/videos/${c.video}.mp4`} type="video/mp4" />
+            </video>
+          )}
           <p class="text-xs uppercase tracking-[0.18em] text-accent">
             {c.category}
           </p>
@@ -759,6 +782,11 @@ const nav = [
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       (modal.querySelector("[data-close]") as HTMLElement | null)?.focus();
+      // Vídeo só começa sozinho se a pessoa não pediu menos movimento.
+      const video = body.querySelector("video");
+      if (video && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        video.play().catch(() => {});
+      }
     };
 
     const close = () => {

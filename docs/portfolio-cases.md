@@ -31,12 +31,13 @@ Destaques atuais (ordem do grid):
 |---|---|---|---|
 | 1 | Espaço São José | screenshot | `patiosaojose.info` |
 | 2 | Cardápio digital para casa de lámen | screenshot | `soracardapio.online` |
-| 3 | Acidentes na Fernão Dias (BR-381) | screenshot + código | GitHub Pages |
-| 4 | Guia de presentes — Stardew Valley | screenshot + código | GitHub Pages |
-| 5 | API de predição de churn em telecom | screenshot + código | `tc-churn-api.onrender.com` · repo `tc-mle-fase1` |
-| 6 | Camada de dados sobre um ERP sem API | ilustração (diagrama segue no modal) | — |
-| 7 | LLMs and the Illusion of Rigor | capa + link | ResearchGate |
-| 8 | Tornando visível o design de LLMs (TCC) | capa (1ª pág.) + PDF | `/docs/tese-luca-stephan.pdf` |
+| 3 | Manduzito vs eMilho Pastelzão (animação) | thumb + vídeo no modal | `/videos/luta-pa.mp4` |
+| 4 | Acidentes na Fernão Dias (BR-381) | screenshot + código | GitHub Pages |
+| 5 | Guia de presentes — Stardew Valley | screenshot + código | GitHub Pages |
+| 6 | API de predição de churn em telecom | screenshot + código | `tc-churn-api.onrender.com` · repo `tc-mle-fase1` |
+| 7 | Camada de dados sobre um ERP sem API | ilustração (diagrama segue no modal) | — |
+| 8 | LLMs and the Illusion of Rigor | capa + link | ResearchGate |
+| 9 | Tornando visível o design de LLMs (TCC) | capa (1ª pág.) + PDF | `/docs/tese-luca-stephan.pdf` |
 
 > Ordem definida pelo Luca em 08/09/2026: os três sites navegáveis abrem a galeria; o resto segue atrás.
 
@@ -275,6 +276,14 @@ TCC na FGV EAESP (2025), orientação do Prof. Gabriel Silva Cogo. Estudo eDSR d
 - **Stack:** Astro · site estático
 - **Preview:** screenshot da área do cardápio (menu de categorias, filtros e primeiros pratos), recortado em 16:10 e reduzido para 960×600.
 - **Posição:** 2º da galeria, logo depois do Espaço São José (pedido do Luca em 29/09/2026).
+
+### I9. Manduzito vs eMilho Pastelzão — animação de luta ⭐ DESTAQUE
+- **Resumo:** luta de 15 s no traço dos desenhos dos anos 1930 (estilo Cuphead), com personagens e cenário de Pouso Alegre: um dragão-mandu contra um pastel, em frente à Catedral.
+- **Como foi feito:** vídeo numa tomada só no Seedance 2.0 (Cinema Studio do Higgsfield), com cada personagem preso a imagens de referência (frente, perfil, um quadro por golpe). Cenário gerado à parte no Seedream a partir de foto real da Catedral (a 1ª versão, em aquarela e perspectiva diagonal, não casava com o traço). HUD de jogo de luta gerado por script Python e exportado em ProRes 4444 com transparência; montagem no CapCut a 12 fps, com granulação e vinheta.
+- **Stack:** Seedance 2.0 (Higgsfield) · Seedream · Python · CapCut
+- **Mídia:** `public/videos/luta-pa.mp4` (H.264, 1080p, faststart, ~6 MB), toca no modal com `preload="none"` — nada é baixado até abrir. Pôster 16:9 em `previews/luta-pa-poster.webp`; capa do card (16:10) em `previews/luta-pa.webp`.
+- **Cuidado:** o estilo é homenagem a Cuphead (Studio MDHR) — peça de portfólio, sem uso comercial.
+- **Posição:** 3º da galeria, logo depois do cardápio (pedido do Luca em 07/10/2026).
 
 ---
 

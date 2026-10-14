@@ -2,7 +2,7 @@
 // Tela inicial (capa arcade). PRESS START abre o menu com as fases.
 // /#menu abre direto no menu (é para onde os botões "◀ Menu" voltam).
 import Layout from "../layouts/Layout.astro";
-import Logo from "../components/nekobit/Logo.astro";
+import LogoIntro from "../components/nekobit/LogoIntro.astro";
 import Starfield from "../components/nekobit/Starfield.astro";
 import MenuBar from "../components/nekobit/MenuBar.astro";
 import PixelSprite from "../components/nekobit/PixelSprite.astro";
@@ -46,7 +46,7 @@ const phases = [
     <div class="cover-inner">
       <h1 class="sr-only">Nekobit</h1>
       <div class="cover-logo">
-        <Logo blink />
+        <LogoIntro />
       </div>
 
       <button id="press-start" type="button" class="press-start font-pixel">

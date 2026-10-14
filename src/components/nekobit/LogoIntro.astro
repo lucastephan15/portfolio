@@ -1,0 +1,154 @@
+---
+// Logo da capa com a abertura "bit a bit": o gato-bit se monta e o wordmark se escreve (vinheta Nekobit, out/2026).
+// O estado final é idêntico ao <Logo blink /> (mesmas grades de src/lib/pixel.ts): sem JS, sem modo ou com
+// reduced-motion, o visitante vê só o logo pronto. Tudo anda em passos de 1/12 s (~3,5 s no total).
+// Toca só na capa (sem hash) e só na primeira visita da sessão; clique/tecla durante a abertura pula para o fim.
+import { SYMBOL, WORDMARK, LOGO_W, LOGO_H, steps, PALETTE } from "../../lib/pixel";
+
+const rows = steps(6);
+const sym: string[] = [];
+const lids: string[] = [];
+SYMBOL.forEach((line, r) =>
+  [...line].forEach((ch, c) => {
+    const rect = `<rect x="${c}" y="${r + 1}" width="1" height="1" fill="${rows[r]}"`;
+    if (ch === "X") sym.push(`${rect} data-r="${r}" data-c="${c}"/>`);
+    if (ch === "o") lids.push(`${rect}/>`);
+  }),
+);
+const word: string[] = [];
+WORDMARK.forEach((line, y) =>
+  [...line].forEach((ch, x) => {
+    if (ch === "X") word.push(`<rect x="${x + 10}" y="${y}" width="1" height="1" fill="${PALETTE.fosforo}" data-c="${x}"/>`);
+  }),
+);
+const WORD_W = WORDMARK[0].length;
+---
+
+<svg
+  class="px-sprite px-blink logo-intro"
+  viewBox={`0 0 ${LOGO_W} ${LOGO_H}`}
+  style={`--w:${LOGO_W};--h:${LOGO_H}`}
+  role="img"
+  aria-label="Nekobit"
+  data-intro
+  data-word-w={WORD_W}
+>
+  <g class="li-sym">
+    <Fragment set:html={sym.join("")} />
+    <g class="px-lid"><Fragment set:html={lids.join("")} /></g>
+  </g>
+  <g class="li-word"><Fragment set:html={word.join("")} /></g>
+  <rect class="li-head" x="10" y="0" width="1" height="7" fill={PALETTE.ciano} style="display:none" />
+</svg>
+<!-- Esconde logo e PRESS START já no primeiro quadro quando a abertura vai tocar (o <script> do Astro roda depois do
+     primeiro desenho). Trava de segurança: se algo falhar, tudo reaparece em 5 s. -->
+<script is:inline>
+  (function () {
+    try {
+      if (!sessionStorage.getItem("nekobit-abertura") && !location.hash && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        var h = document.documentElement; h.dataset.abertura = "1";
+        setTimeout(function () { delete h.dataset.abertura; }, 5000);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  :global(html[data-abertura]) .logo-intro .li-sym,
+  :global(html[data-abertura]) .logo-intro .li-word,
+  :global(html[data-abertura] #press-start) { visibility: hidden; }
+  .logo-intro { overflow: visible; }
+  .logo-intro.is-playing .px-lid { animation: none; }
+</style>
+
+<script>
+  const svg = document.querySelector<SVGSVGElement>("[data-intro]");
+  const KEY = "nekobit-abertura";
+  const seen = (() => { try { return sessionStorage.getItem(KEY) === "1"; } catch { return false; } })();
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // só na capa: quem chega por link direto (/#contato, /#menu…) nunca espera
+  if (svg && !seen && !reduced && !location.hash) {
+    try { sessionStorage.setItem(KEY, "1"); } catch {}
+    const symG = svg.querySelector<SVGGElement>(".li-sym")!;
+    const lid = svg.querySelector<SVGGElement>(".px-lid")!;
+    const head = svg.querySelector<SVGRectElement>(".li-head")!;
+    const bits = [...symG.querySelectorAll<SVGRectElement>("rect[data-r]")].map((e) => ({ e, r: +e.dataset.r!, c: +e.dataset.c! }));
+    const wbits = [...svg.querySelectorAll<SVGRectElement>(".li-word rect")].map((e) => ({ e, c: +e.dataset.c! }));
+    const WORD_W = +svg.dataset.wordW!;
+    const start = document.getElementById("press-start");
+    const F = 1 / 12;
+    const FALL = [30, 13, 4];
+
+    // Linha do tempo (segundos). walk = os 3 pulos do centro da tela até o lugar do gato no logo.
+    const P = { seed: 0.42, row0: 0.42, rowGap: 0.17, fall: 3, hop: 1.5, blink: 1.75, walk: [2.0, 2.17, 2.33], word: 2.5, perStep: 3, end: 3.5 };
+    const CENTER = 17; // bits entre o gato no centro da tela e o lugar dele no logo
+    const HOPS = [6, 6, 5];
+
+    function render(t: number) {
+      const land = (r: number, c: number) => (r === 5 && c === 3 ? 0 : P.row0 + (5 - r) * P.rowGap + (c % 2) * F);
+      for (const b of bits) {
+        const k = Math.round((t - land(b.r, b.c)) * 12);
+        let dy = 0, vis = true;
+        if (b.r === 5 && b.c === 3 && t < P.seed) vis = Math.floor(t * 4) % 2 === 0;
+        else if (k < -P.fall) vis = false;
+        else if (k < 0) dy = -FALL[FALL.length - P.fall + (k + P.fall)];
+        b.e.style.display = vis ? "" : "none";
+        b.e.setAttribute("transform", dy ? `translate(0 ${dy})` : "");
+      }
+      let x = CENTER, y = 0;
+      if (t >= P.hop && t < P.hop + F) y = -1;
+      {
+        let done = 0;
+        P.walk.forEach((h, i) => {
+          if (t >= h + 2 * F) done = i + 1;
+          else if (t >= h) { x = CENTER - HOPS.slice(0, i).reduce((s, v) => s + v, 0) - Math.ceil(HOPS[i] / 2); y = -1; }
+        });
+        if (done) x = CENTER - HOPS.slice(0, done).reduce((s, v) => s + v, 0);
+        if (done === 3) x = 0;
+      }
+      symG.setAttribute("transform", x || y ? `translate(${x} ${y})` : "");
+      lid.style.opacity = t >= P.blink && t < P.blink + 2 * F ? "1" : "0";
+      const n = t < P.word ? -1 : Math.floor((t - P.word) * 12 + 1e-6) * P.perStep + P.perStep;
+      wbits.forEach((w) => (w.e.style.display = w.c < n ? "" : "none"));
+      const writing = n > 0 && n < WORD_W;
+      head.style.display = writing ? "" : "none";
+      head.setAttribute("x", String(10 + n));
+    }
+
+    let timer = 0;
+    function finish() {
+      clearInterval(timer); timer = 0;
+      svg!.classList.remove("is-playing");
+      bits.forEach((b) => { b.e.style.display = ""; b.e.setAttribute("transform", ""); });
+      wbits.forEach((w) => (w.e.style.display = ""));
+      symG.setAttribute("transform", ""); head.style.display = "none"; lid.style.opacity = "";
+      if (start) start.style.visibility = "";
+      delete document.documentElement.dataset.abertura;
+    }
+    function play() {
+      svg!.classList.add("is-playing");
+      if (start) start.style.visibility = "hidden";
+      let f = 0;
+      render(0);
+      delete document.documentElement.dataset.abertura;
+      timer = window.setInterval(() => {
+        f++;
+        const t = f / 12;
+        if (t >= P.end) finish(); else render(t);
+      }, 1000 / 12);
+    }
+
+    {
+      // Durante a abertura, qualquer tecla/clique/toque pula para o fim (e não aciona o PRESS START)
+      const skip = (e: Event) => {
+        if (!timer) return;
+        e.preventDefault(); e.stopImmediatePropagation();
+        finish();
+      };
+      window.addEventListener("keydown", skip, true);
+      window.addEventListener("pointerdown", skip, true);
+      play();
+    }
+  }
+</script>
